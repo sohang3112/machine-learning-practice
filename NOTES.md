@@ -25,16 +25,70 @@ ML algos work best with *Independant & Identically Distributed (IID)* variables.
     - Optional final step (assuming we watched out for overfitting in the previous models):
     Train final model with whole model. Its performance should be better than that of worst model (out of models previously trained)
 
-## Machine Learning
-Classification: When we can split things up this nicely, we call the sections into which we chop up the plane *decision regions / domains*,
-and the lines or curves between them *decision boundaries*.
+### [Underfitting & Overfitting](https://www.kaggle.com/code/dansbecker/underfitting-and-overfitting)
+*Underfitting* is easy to fix - just add more training data. Methods to fix *Overfitting*:
+- While training, if validation error doesn't decrease for a few training epochs, *Early Stop training*.
+- **Regularization** methods delay over-fitting to later epochs. A popular way is to limit the values of the parameters used by the classifier. By keeping all of the parameters to small numbers (i.e., all are roughly in the same range), we prevent any one of them from dominating. This makes it harder for the classifier to become dependent on specialized, narrow idiosyncrasies. Amount of regularization to apply is specified with a hyperparameter $\lambda$ - higher $\lambda$ means more regularization and smoother curves. **TODO:** What is formula for amount of regularization, and practically how does it affect regularization?
 
-Multi-class classification using **Boundary Classification** methods:
-- *One vs Rest* / *Binary Relevance*: multiple binary classifiers, one for each class (eg. A | ~A). 
+- *Bias* measures the tendency of a system to consistently learn the wrong things (underfitting)
+- *Variance* measures its tendency to learn irrelevant details (overfitting).
+- **Bias-Variance Tradeoff**: As bias reduces, variance tends to increase (& vice versa).
+- Usually we want *low bias (simpler curves) & low variance (model can generalize well).*
+  But there are some exceptions where we don't care about one of bias or variance:
+    - If data is perfectly representative of future data, then we don't care about high variance 
+    since we want the model to fit the data perfectly.
+    - If data is not a good representative of future data, then we prefer low bias (so that model gives some reasonable answer on future data) don't care about variance (fitting the data isn't too important because it's lousy data).
+
+**TODO:** Go through (& implement) example at: 
+- book "Deep Learning - A Visual Approach" 
+- chapter "Underfitting & Overfitting"
+- my comment "Bayes Rule Example: Curve-Fitting"
+
+
+## Data - Types, Cleaning
+**Data Types:**
+```mermaid
+graph TD;
+    Data --> Numerical;
+    Data --> Categorical;
+    Categorical --> Nominal["Nominal (unordered)"];
+    Categorical --> Ordinal["Ordinal (ordered)"];
+```
+
+**Data Cleaning:**
+- *Dealing with Missing Values*: One approach is to just drop the columns having missing values. But this is not recommended because the column could have important information. Instead a better approach is to fill in missing values with the column's average using [`sklearn.impute.SimpleImputer`](https://www.kaggle.com/code/alexisbcook/missing-values#Score-from-Approach-2-(Imputation)).
+- [*Dealing with Categorical Data:*](https://www.kaggle.com/code/alexisbcook/categorical-variables) Categorical data are like Enums - they have one of a fixed set of values (eg. `male`, `female`, `other`). 
+2 approaches:
+   - Ordinal - convert to 1 numerical column having values like $0, 1, 2, ..$
+   - One-Shot Encoding - convert to mutiple columns (one for each value in fixed set), each having value 1 or 0 to indicate whether the value is present or missing. It's *impractical on large no. of columns (>= 15)*. **It's usually slightly better than Ordinal encoding.**
+
+
+## Problem Types
+
+### Regression
+Predict a numerical value - *eg.* predict house price (say $100,000). Models are evaluated using **Mean Absolute Error**. *Eg.* [This Kaggle code](https://www.kaggle.com/code/dansbecker/model-validation) shows how to do regression using `sklearn.tree.DecisionTreeRegressor`.
+
+### Classification
+```mermaid
+graph TD;
+    Classification --> Discrete;
+    Classification --> Probabilistic;
+```
+
+#### Probabilistic Classification
+- Predict the probability of output classes. For example, [this (unsolved) problem](https://www.kaggle.com/competitions/playground-series-s4e1/overview) asks us to predict probability (b/w 0 to 1) of whether a customer continues his account with the bank or closes it. 
+- Models are evaluated using [Area under ROC Curve](https://en.wikipedia.org/wiki/Receiver_operating_characteristic), which plots True Positive Rate against False Positive Rate at each probability threshold.
+- **TODO:** Check this in detail.
+
+#### Discrete Classification
+When we can split things up this nicely, we call the sections into which we chop up the plane *decision regions / domains*, and the lines or curves between them *decision boundaries*.
+
+Multi-class classification using **Boundary Classification** ML methods:
+- One vs Rest / Binary Relevance: multiple binary classifiers, one for each class (eg. A | ~A). 
 For any input, inference on all; ans = one where predicted with max probability.
 - One vs One: multiple binary classifiers, one for each combination of classes. Each classifier votes, label with max votes wins.
 
-**K-Means Clustering**: Unsupervised ML: cluster using averages of groups of points
+**K-Means Clustering**: *Unsupervised ML* model: cluster using averages of groups of points
 - k (hyperparameter) = no. of clusters
 - *Curse of Dimensionality:* Past a certain point, adding more dimensions (features) can make it harder for ML to accurately classify.
 That is, it's hard for the model to create clusters of points that *generalize*
@@ -42,12 +96,18 @@ Reducing k (no. of clusters/bins) helps, but after enough dimensions the situati
 - *Blessing of Non-Uniformity / Structure:* Most real-world data doesn't tend to uniformly spread: a few regions will be dense, most spaces will be empty. So having good enough density at the dense regions is sufficient.
 - This is why, if an ML system has lots of features, we will *need a large amount of training data* to accurately classify.
 
+
+## Machine Learning Models
+- [Random Forests vs Decision Trees](https://stats.stackexchange.com/a/285835/406211): A Random Forest randomly selects observations/rows and specific features/variables to build multiple decision trees from and then averages the results. After a large number of trees are built using this method, each tree "votes" or chooses the class, and the class receiving the most votes by a simple majority is the "winner" or predicted class
+
+
 ## Training - Gradient Descent
 Gradient is n-dimensional extension of 2-d derivative.
 
 *Momentum* technique prevents algo from stopping at places where gradient is 0 (curve flattens) but point is not a minima or maxima
 
 Algo can sometimes get *stuck* (eg. at a local maxima/minima) - it stops learning, accuracy & error rate stop improving.
+
 
 ## Performance Metrics
 - Type I Error = False Positive (FP)
@@ -70,6 +130,7 @@ $$F1 = \frac{2 \times TP}{2 \times TP + FP + FN}$$
 While drawing confusion matrix, prior info should be taken into account.
 *Eg.* if we know in advance that only 1% of population has disease, we should draw confusion matrix taking that into account. In this example, test has 99% accuracy - but Precision is only 33%, i.e., out of all predicted with disease, 67% are false positives!
   
+
 ## Statistics
 - Probability Mass Function is just another name for Discrete Probability Distribution
 - UniformDistribution(x) = 1 if 0 <= x <= 1 else 0
@@ -102,7 +163,8 @@ Bayes Rule (Conditional Probability) loop - each experiment gives us a better va
     - peform experiment, observe what happens (outcome = $B$ or $\neg B$)
     - *Bayes Rule:* $P(B|A) = \frac{P(B) \times P(A|B)}{P(A)}$   (old $P(A)$ is the *prior*)
     - now update $P(A) = P(B|A)$ since we know B happened (or $P(\neg B|A)$ if B didn't happen) - new $P(A)$ is the *posterior*.
-    
+
+
 ## Information Theory
 **Variable-bitrate code / Adaptive code** - chars have variable-length encodings, optimized so that more frequent chars are shorter.
 - *Eg.* Morse Code
@@ -117,3 +179,8 @@ Cross Entropy is assymetrical - cross entropy of A wrt B != cross entropy of B w
 - Higher cross entropy means higher error
 - *Relative/Cross Entropy* = extra no. of bits req using imperfect code $Entropy - CrossEntropy$. **TODO:** Cross vs Relative Entropy ; calc Entropy, Cross Entropy, Rel. Entropy in an example
 - KL Divergence is similar to Cross Entropy (tells us how much error). But Cross Entropy is faster to calculate, so that one is used in practice.
+
+
+## Learning Resources
+- Book "Deep Learning - A Visual Approach"
+- Kaggle Tutorials & *Getting Started* problems - *eg.* [Titanic Problem](https://www.kaggle.com/alexisbcook/titanic-tutorial).
