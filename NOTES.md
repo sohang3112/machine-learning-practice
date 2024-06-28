@@ -8,7 +8,6 @@ Eg. of **pure ML models dont have any hidden layers** - Linear Regression, Logis
 ML algos work best with *Independant & Identically Distributed (IID)* variables.
 
 - In training loop, both hyperparameters and model weights are tuned.
-- *Data Leakage / Contamination* is when some data is present in both training & test data.
 - Train-Test-Validation split is typically 60:20:20.
    - Validation data is used after every epoch to see model tranining performance - 
       since it's used in every train epoch, it has some data leakage. 
@@ -24,6 +23,10 @@ ML algos work best with *Independant & Identically Distributed (IID)* variables.
       Divide data into k groups. Then generate N sets of train & validation data: validation has chunk no. i, train has rest.
     - Optional final step (assuming we watched out for overfitting in the previous models):
     Train final model with whole model. Its performance should be better than that of worst model (out of models previously trained)
+
+### ML Mistakes to Avoid
+- *Data Leakage / Contamination*: data is present in both training & test data.
+- *Information Leakage*: validation data affects some aspect of training - eg. scale (for transformation) determined with data that includes validation data
 
 ### [Underfitting & Overfitting](https://www.kaggle.com/code/dansbecker/underfitting-and-overfitting)
 *Underfitting* is easy to fix - just add more training data. Methods to fix *Overfitting*:
@@ -45,7 +48,7 @@ ML algos work best with *Independant & Identically Distributed (IID)* variables.
 - my comment "Bayes Rule Example: Curve-Fitting"
 
 
-## Data - Types, Cleaning
+## Data Manipulation
 **Data Types:**
 ```mermaid
 graph TD;
@@ -62,6 +65,46 @@ graph TD;
    - Ordinal - convert to 1 numerical column having values like $0, 1, 2, ..$
    - One-Shot Encoding - convert to mutiple columns (one for each value in fixed set), each having value 1 or 0 to indicate whether the value is present or missing. It's *impractical on large no. of columns (>= 15)*. **It's usually slightly better than Ordinal encoding.**
 
+**Data Slicing:**
+- *Sample-wise*: All features are aspects of same thing. *Eg.* When data is audio amplitudes at different times, it makes sense to independantly normalize each audio sample (0 -> quitest, 1 -> loudest).
+- *Feature-wise*: Features are independant (they represent fundamentally different things). *Eg.* Mean Subtraction $X - Avg(X)$
+- *Element-wise*: All elems independant. *Eg.* Centimeters -> Millimeters conversion.
+
+**Data Augmentation:** Enlarge a dataset - eg. in images, we can randomly flip, rotate, scale, shift horizontally/vertically, etc. After augmentation, each column of data is usually standardized so that it has zero mean and unit variance.
+
+**Data Shrinking:** (to make training & inference faster)
+- *Feature Selection / Filtering*: Discard useless or almost useless features (eg. correlated with a different feature already present in data). Impact of discarding each column in a dataset can be estimated in various ways - check [feature_selection.ipynb](feature_selection.ipynb) to see some of these.
+- *Dimensionality Reduction*: Sometimes when multiple features are strongly related, we can replace them with a single feature that combines both. One way to do this is with **Principal Component Analysis** (explained below).
+
+**Principal Component Analysis (PCA)**: Reduce dimensions of data
+- Project N-dimensional points onto 1 or more lower-dimensional line/plane of maximum variances (i.e., which has the largest range of points after they are projected onto it). Each of these projection planes is called a *component* - basically a linear equation combining original features using some coefficients. *Principal Component* is the component with maximum variance.
+- **TODO:** Check the math of this (components are derived using *eigenvectors of covariance matrix*.)
+
+
+### Data Transformation
+- *Normalization*: Scale the data so that it fits in a range (usually $[0,1]$ or $[-1,1]$).
+- *Standardization*: Transform data so that it has zero mean and unit variance.
+    - *Mean Normalization / Subtraction*: Do $X - Avg(X)$ for each column, so that its mean becomes 0.
+    - *Variance Normalization*: Scale it so that its Standard Deviation becomes 1 (so 68% data is in $[-1,1]$).
+
+**IMPORTANT**: After doing these operations on training data, *exact same operations should be done on test data*. Scaling factor, addition factor, etc. should be exactly the same in test data as determined in training data.
+
+- *Univariate Transformation*: Applied independantly to each feature/column.
+- *Multivariate Transformation*: Applied to all or some columns as a group (eg. scaling all columns by same factor).
+
+Which type of transformation should be done depends on the problem. 
+When X,Y are independant features, Univariate Transformation makes sense.
+
+**TODO:** Check in detail when to do Multilateral Transformation.
+
+**Inverse Transformation:** All ML libs have a way to invert transformation. For example:
+```python
+from sklearn import preprocessing
+scaler = preprocessing.StandardScaler().fit(X_train)  # X_train is a Numpy array
+X_scaled = scaler.transform(X_train)
+scaler.inverse_transform(X_train)
+```
+
 
 ## Problem Types
 
@@ -71,14 +114,13 @@ Predict a numerical value - *eg.* predict house price (say $100,000). Models are
 ### Classification
 ```mermaid
 graph TD;
-    Classification --> Discrete;
-    Classification --> Probabilistic;
+    Classification --> Parametric["Parametric (assume, say, normal distribution)"];
+    Classification --> Non-Parametric;
+    Non-Parametric --> k-Nearest-Neighbours;
+    Non-Parametric --> Decision-Tree;
+    Parametric --> Support-Vector-Machine;
+    Parametric --> Naive-Bayes;
 ```
-
-#### Probabilistic Classification
-- Predict the probability of output classes. For example, [this (unsolved) problem](https://www.kaggle.com/competitions/playground-series-s4e1/overview) asks us to predict probability (b/w 0 to 1) of whether a customer continues his account with the bank or closes it. 
-- Models are evaluated using [Area under ROC Curve](https://en.wikipedia.org/wiki/Receiver_operating_characteristic), which plots True Positive Rate against False Positive Rate at each probability threshold.
-- **TODO:** Check this in detail.
 
 #### Discrete Classification
 When we can split things up this nicely, we call the sections into which we chop up the plane *decision regions / domains*, and the lines or curves between them *decision boundaries*.
@@ -96,9 +138,51 @@ Reducing k (no. of clusters/bins) helps, but after enough dimensions the situati
 - *Blessing of Non-Uniformity / Structure:* Most real-world data doesn't tend to uniformly spread: a few regions will be dense, most spaces will be empty. So having good enough density at the dense regions is sufficient.
 - This is why, if an ML system has lots of features, we will *need a large amount of training data* to accurately classify.
 
+**k-Nearest Neighbours (kNN)**: Supervised, Non-Parametric ML: For any test point, find k nearest neighbouring points - the most popular class among these is predicted. 
+- It's an *on-demand / lazy* algo because training data isn't processed at all, i.e., there's no learning step - the training data is simply stored. *With larger k, prediction boundaries smoothen*.
+- Pros: Can handle any kind of boundaries / distribution of classes. 
+- Cons: **Inference is slow and it consumes a lot of memory** because all the training data is in memory at inference time. Also to classify accurately, the k neighbours actually need to be near, so it **requires a lot of training data**.
+
+#### Probabilistic Classification
+- Predict the probability of output classes. For example, [this (unsolved) problem](https://www.kaggle.com/competitions/playground-series-s4e1/overview) asks us to predict probability (b/w 0 to 1) of whether a customer continues his account with the bank or closes it. 
+- Models are evaluated using [Area under ROC Curve](https://en.wikipedia.org/wiki/Receiver_operating_characteristic), which plots True Positive Rate against False Positive Rate at each probability threshold.
+- **TODO:** Check this in detail.
+
 
 ## Machine Learning Models
-- [Random Forests vs Decision Trees](https://stats.stackexchange.com/a/285835/406211): A Random Forest randomly selects observations/rows and specific features/variables to build multiple decision trees from and then averages the results. After a large number of trees are built using this method, each tree "votes" or chooses the class, and the class receiving the most votes by a simple majority is the "winner" or predicted class
+
+### Decision Tree
+Decision Tree is a supervised, non-parameteric ML model that uses binary trees.
+
+**Types:**
+```mermaid
+graph TD;
+    Decision-Tree --> Classification["Classification (Categorical variable)"]
+    Decision-Tree --> Regression["Regression (Continous variable)"]
+```
+
+**Training** is *greedy*: at a time, only the tree trained so far and a single sample is considered - the whole training data isn't considered at the start to balance the tree. At each leaf node, if current sample is same as all classes in existing data at the leaf node, then it's added to the leaf. Otherwise a new branch is created for the new sample. When we reach depth limit, then branching isn't possible.
+
+A leaf node is *pure* if all data in it is of the same class - purity is reduced when data of any other class is added. When purity falls below a threshold, the node becomes *impure* and is split.
+
+**Node Splitting methods:**
+- *Information Gain (IG)*: $IG \propto 1/Entropy \propto 1/Purity$: Choose test such that sum of children's entropies/purities is less than parent's entropy.
+- *Gini Impurity*: Minimizes probability of mis-classifying a sample. **TODO:** Check how its math works.
+
+Decision Trees are very prone to overfitting - some strategies to limit overfitting are:
+- Depth Limiting
+- Minimum no. of samples required for each leaf node
+- *Pruning*: Starting at bottom, trim each leaf node if error rate is acceptable after removing it. If all children of a parent node have been removed, then it becomes a leaf node which is eligible for trimming.
+
+### Support Vector Machine (SVM)
+SVM is a supervised ML model that finds the boundary line furthest from each cluster of points (each cluster of a different class). First algo chooses points called *support vectors*, then chooses a line farthest from these - distance from line to support vectors is called *margin*.
+
+**Hyperparameter C** controls how sensitive SVM is to points appearing in the margin zone. The lower C is, the more SVM wants an empty margin zone; for higher C, it allows more points to appear in the margin zone.
+
+SVM is parametric since it expects classes to be seperated by linear boundaries. But it can still work with data seperated by non-linear boundaries using **SVM Kernel Trick**, a mathematical technique using which the data is transformed to higher dimensions such that now a linear boundary can be drawn. ML libraries automatically apply this method.
+
+### [Random Forests](https://stats.stackexchange.com/a/285835/406211)
+A Random Forest randomly selects observations/rows and specific features/variables to build multiple decision trees from and then averages the results. After a large number of trees are built using this method, each tree "votes" or chooses the class, and the class receiving the most votes by a simple majority is the "winner" or predicted class.
 
 
 ## Training - Gradient Descent
@@ -113,10 +197,10 @@ Algo can sometimes get *stuck* (eg. at a local maxima/minima) - it stops learnin
 - Type I Error = False Positive (FP)
 - Type II Error = False Negative (FN)
 
-_     | Positive | Negative |
------ | -------- | -------- |
-True  | TP       | TN       |
-False | FP       | FN       |
+Actual \ Predicted | Positive | Negative |
+------------------ | -------- | -------- |
+True               | TP       | TN       |
+False              | FP       | FN       |
 
 - Precision (Positive Predictive Value) = TP / (TP+FP)
 - Recall / Sensitiivity / Hit Rate / True Positive Rate = TP / (TP+FN)
