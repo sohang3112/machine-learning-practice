@@ -122,6 +122,13 @@ graph TD;
     Parametric --> Naive-Bayes;
 ```
 
+Supervised ML | Pros                                | Cons                                           |
+------------- | ----------------------------------- | ---------------------------------------------- |
+kNN           | Flexible, Fast Train                | Slow Inference, High Memory                    |
+Decision Tree | Explainable, Fast Train & Inference | Tend to Overfit                                |
+SVM           | Fast Inference, Low Memory          | Train $Time \propto Size$, sensitive to $C$    |
+Naive Bayes   | Explainable, Fast Train & Inference, No params to tune | Assumes Normal Distribution |
+
 #### Discrete Classification
 When we can split things up this nicely, we call the sections into which we chop up the plane *decision regions / domains*, and the lines or curves between them *decision boundaries*.
 
@@ -129,9 +136,10 @@ Multi-class classification using **Boundary Classification** ML methods:
 - One vs Rest / Binary Relevance: multiple binary classifiers, one for each class (eg. A | ~A). 
 For any input, inference on all; ans = one where predicted with max probability.
 - One vs One: multiple binary classifiers, one for each combination of classes. Each classifier votes, label with max votes wins.
+- **TODO:** Check/Implement practical examples of this.
 
 **K-Means Clustering**: *Unsupervised ML* model: cluster using averages of groups of points
-- k (hyperparameter) = no. of clusters
+- k (hyperparameter) = no. of clusters - model assigns a class to each of the k clusters found by it.
 - *Curse of Dimensionality:* Past a certain point, adding more dimensions (features) can make it harder for ML to accurately classify.
 That is, it's hard for the model to create clusters of points that *generalize*
 Reducing k (no. of clusters/bins) helps, but after enough dimensions the situation isn't improved (i.e., density -> 0)
@@ -181,6 +189,9 @@ SVM is a supervised ML model that finds the boundary line furthest from each clu
 
 SVM is parametric since it expects classes to be seperated by linear boundaries. But it can still work with data seperated by non-linear boundaries using **SVM Kernel Trick**, a mathematical technique using which the data is transformed to higher dimensions such that now a linear boundary can be drawn. ML libraries automatically apply this method.
 
+### Naive Bayes
+It's a *very fast* parametric method in which we assume points of each class are in a normal/gaussian distribution, and we find the parameters for each class's normal distribution during training. During inference, we find the probability of a sample point being in normal distribution of each class - class with maximum probability wins.
+
 ### [Random Forests](https://stats.stackexchange.com/a/285835/406211)
 A Random Forest randomly selects observations/rows and specific features/variables to build multiple decision trees from and then averages the results. After a large number of trees are built using this method, each tree "votes" or chooses the class, and the class receiving the most votes by a simple majority is the "winner" or predicted class.
 
@@ -209,7 +220,7 @@ False              | FP       | FN       |
 - Specificity = True Negative Rate = TN / (TN+FP)
 - **F1 Score**: combines both precision and recall. when F1 score -> 1, that means both Precision, Recall -> 1
 
-$$F1 = \frac{2 \times TP}{2 \times TP + FP + FN}$$
+$$F1 = \frac{2 \times TP}{2 \times TP + FP + FN} = \frac{2 \times Precision \times Recall}{Precision + Recall}$$
    
 While drawing confusion matrix, prior info should be taken into account.
 *Eg.* if we know in advance that only 1% of population has disease, we should draw confusion matrix taking that into account. In this example, test has 99% accuracy - but Precision is only 33%, i.e., out of all predicted with disease, 67% are false positives!
