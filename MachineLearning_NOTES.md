@@ -1,10 +1,9 @@
-# Notes on Machine Learning & Deep Learning
+# Notes on Machine Learning
 - Supervised - ML learns rel b/w input & label
 - Unsupervised - ML learns rel b/w diff parts of input. One application is *clustering*
 - Reinforcement - (involves multiple steps/predictions instead of single) ML takes a few steps, then humans rate it as better/worse than another approach. Eg. AlphaGo
 - **Deep Learning = ML with hidden layers**
 
-Eg. of **pure ML models dont have any hidden layers** - Linear Regression, Logistic Regression, Random Forests, Support Vector Machines (SVMs), k-Nearest Neighbours, etc.
 ML algos work best with *Independant & Identically Distributed (IID)* variables.
 
 - In training loop, both hyperparameters and model weights are tuned.
@@ -78,6 +77,10 @@ graph TD;
 
 **Principal Component Analysis (PCA)**: Reduce dimensions of data
 - Project N-dimensional points onto 1 or more lower-dimensional line/plane of maximum variances (i.e., which has the largest range of points after they are projected onto it). Each of these projection planes is called a *component* - basically a linear equation combining original features using some coefficients. *Principal Component* is the component with maximum variance.
+- After PCA, check error with **Mean Squared Error (MSE)** and also check **Explainable Variance Ratio**. Interpret MSE like this:
+    - MSE close to 0: Indicates very low error, almost perfect reconstruction (though this can sometimes indicate overfitting if the model is too complex).
+    - MSE around the average variance of data: Can be considered reasonable, indicating that the model captures most of the variability in the data.
+    - MSE significantly higher than the average variance: May suggest poor model performance or inadequate dimensionality reduction.
 - **TODO:** Check the math of this (components are derived using *eigenvectors of covariance matrix*.)
 
 
@@ -192,8 +195,28 @@ SVM is parametric since it expects classes to be seperated by linear boundaries.
 ### Naive Bayes
 It's a *very fast* parametric method in which we assume points of each class are in a normal/gaussian distribution, and we find the parameters for each class's normal distribution during training. During inference, we find the probability of a sample point being in normal distribution of each class - class with maximum probability wins.
 
-### [Random Forests](https://stats.stackexchange.com/a/285835/406211)
-A Random Forest randomly selects observations/rows and specific features/variables to build multiple decision trees from and then averages the results. After a large number of trees are built using this method, each tree "votes" or chooses the class, and the class receiving the most votes by a simple majority is the "winner" or predicted class.
+### Ensemble
+Instead of a single model, *Ensemble* is a group of similar models. Each model is trained on slightly different data, which makes it unlikely that all of them will make the same mistake. Final decision is done by voting.\
+
+Voting Types:
+- **Most Commonly Used**: *Plurality Voting* is when each model gets a single vote, majority vote wins.
+- *Weighted Plurality Voting*: Each model's vote gets a different weight. One variant is to use model's prediction confidence as weight.
+
+#### Ensemble of Decision Trees
+*Bagging / Bootstrap Aggregating*: Create N [bootstrap](#bootstrapping) samples. Then train a decision tree of depth D on each sample. Inference is done using Plurality Voting (no weights, every model gets single vote).
+- *Law of Diminishing Returns in Ensemble Construction*: After a certain point, adding more models doesn't improve results. A rule of thumb is to **use about same no. of classifiers as no. of classes**.
+
+Randomization Techniques:
+- **Random Forests**: While training, before branching in the decision trees, do *feature bagging*: choose a random subset of features and then find best test based on these only. Purpose is to minimize chance of making same decision in every tree at the node. 
+*Hyper-Parameters:* No. of trees, Depth of each tree, % of features to be considered at each node.
+- *Extremely Random Trees / Extra Trees*: At each branching of trees, choose split at random (instead of choosing best split). This *trades off some accuracy for reduced overfitting.*
+
+#### Boosting
+Combine multiple weak learners using *Weighted Plurality Voting* - i.e., vote of each model is added after weighting (rather than directly). The weights are chosen by a **Boosting Algorithm**. A good rule of thumb is to use about as many models as the no. of classes.
+
+A *weak learner* is a model whose accuracy is at least slightly better or worse than chance. Eg. *Decision Stump* (Decision Tree with a single branching node, such as $x > 5$). **Only requirement is: learner accuracy != chance**
+
+For Binary Classification, *AdaBoost* boosting algo is used. One way to do multi-class classification is **Gradient Boosting** algorithms with **XGBoost** (`multi:softprob` gives probability distribution over all classes) and **LightGBM** `multiclass`. They work by extending Binary Classification Loss function to Multi-Classification loss, eg. with **Softmax**.
 
 
 ## Training - Gradient Descent
@@ -222,6 +245,12 @@ False              | FP       | FN       |
 
 $$F1 = \frac{2 \times TP}{2 \times TP + FP + FN} = \frac{2 \times Precision \times Recall}{Precision + Recall}$$
    
+- **Matthews Correlation Coefficient**: gives an idea of how many values lie on the True Positive diagonal
+   - *Range*: 1 -> perfect prediction, 0 -> random predictions, -1 -> exactly opposite predictions
+   - Python: `sklearn.metrics.matthews_corrcoeff`
+
+$$MCC = \frac{TP \times TN - FP \times FN}{\sqrt{(TP + FP)(TP + FN)(TN + FP)(TN + FN)}}$$
+
 While drawing confusion matrix, prior info should be taken into account.
 *Eg.* if we know in advance that only 1% of population has disease, we should draw confusion matrix taking that into account. In this example, test has 99% accuracy - but Precision is only 33%, i.e., out of all predicted with disease, 67% are false positives!
   
@@ -238,19 +267,21 @@ While drawing confusion matrix, prior info should be taken into account.
       - 3 std. dev. = 99.7%
 - Bernoulli Distribution (discrete) - only 0,1 are possible values. Eg. probability of head/tail on tossing a coin
 - Multinoulli / Categorical Distribution (discrete) - one of more than 2 possible values.
-- **Bootstrapping** - estimate mean of large population
-  - init sample = Sample Without Replacement (SWOR)
-  - Resample from init sample using Sample With Replacement (SWR) - each of these new samples are called Bootstraps
-  - Draw distribution of mean of Bootstraps
-  - Now from this distribution (it's an approx bell curve of actual population), 
-    we can say for example that p% of population is b/w x1 and x2 - this is called a *Confidence Interval*.
-  - Even with a large population (eg. millions), we can make small bootstrap samples of only 10-20 vals each.We can gen. thousands of such bootstraps - the more we generate, the more the curve approaches Normal Distribution & becomes more accurate
 - Covariance (C): $dy \approx C \times dx$ (one var is approx fixed multiple of each other).
     - Correlation (b/w -1 and 1) is better because it's independant of scale, units - 
       we can compare whether one set of vars is more strongly correlated than another.
     - *Partial Correlation* = multi vars, we are only checking correlation between 2 of the vars
+
+### Bootstrapping 
+- estimate mean of large population
+- init sample = Sample Without Replacement (SWOR)
+- Resample from init sample using Sample With Replacement (SWR) - each of these new samples are called Bootstraps
+- Draw distribution of mean of Bootstraps
+- Now from this distribution (it's an approx bell curve of actual population), 
+we can say for example that p% of population is b/w x1 and x2 - this is called a *Confidence Interval*.
+- Even with a large population (eg. millions), we can make small bootstrap samples of only 10-20 vals each.We can gen. thousands of such bootstraps - the more we generate, the more the curve approaches Normal Distribution & becomes more accurate
   
-**Posterior-Prior Loop**:
+### Bayes Posterior-Prior Loop
 Bayes Rule (Conditional Probability) loop - each experiment gives us a better value of $P(A)$:
 - Known: *likelihood* $P(A|B)$, *evidence* $P(B)$
 - let $P(A) = p$   (initial guess of its probability)
