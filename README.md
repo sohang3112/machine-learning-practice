@@ -3,7 +3,7 @@
 Practice Notes on Machine Learning (with code &amp; data for practice exercises)
 
 ## TODO
-- [ ] Try Principal Component Analysis (PCA) with [Iris Dataset](https://www.kaggle.com/datasets/uciml/iris): available in `sklearn.datasets.load_iris()`.
+- [-] Try Classification with [Iris Dataset](https://www.kaggle.com/datasets/uciml/iris): available in `sklearn.datasets.load_iris()`. **WIP:** Did Principal Component Analysis to reduce feature dimensions.
 
 ## Kaggle Problems to Solve
 - [ ] [Home Credit Default Risk](https://www.kaggle.com/c/home-credit-default-risk): Probabilistic Classification

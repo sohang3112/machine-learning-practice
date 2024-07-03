@@ -1,10 +1,9 @@
 # Notes on Machine Learning
 - Supervised - ML learns rel b/w input & label
 - Unsupervised - ML learns rel b/w diff parts of input. One application is *clustering*
-- Reinforcement - (involves multiple steps/predictions instead of single) ML takes a few steps, then humans rate it as better/worse than another approach. Eg. AlphaGo
-- **Deep Learning = ML with hidden layers**
+- Reinforcement - (involves multiple steps/predictions instead of single) ML takes a few steps, then humans rate it as better.
 
-ML algos work best with *Independant & Identically Distributed (IID)* variables.
+**ML models have no hidden layers**. They work best with *Independant & Identically Distributed (IID)* variables.
 
 - In training loop, both hyperparameters and model weights are tuned.
 - Train-Test-Validation split is typically 60:20:20.
@@ -216,7 +215,9 @@ Combine multiple weak learners using *Weighted Plurality Voting* - i.e., vote of
 
 A *weak learner* is a model whose accuracy is at least slightly better or worse than chance. Eg. *Decision Stump* (Decision Tree with a single branching node, such as $x > 5$). **Only requirement is: learner accuracy != chance**
 
-For Binary Classification, *AdaBoost* boosting algo is used. One way to do multi-class classification is **Gradient Boosting** algorithms with **XGBoost** (`multi:softprob` gives probability distribution over all classes) and **LightGBM** `multiclass`. They work by extending Binary Classification Loss function to Multi-Classification loss, eg. with **Softmax**.
+For Binary Classification, *AdaBoost* boosting algo is used. One way to do multi-class classification is **Gradient Boosting** algorithms with **XGBoost** (`multi:softprob` gives probability distribution over all classes) and **LightGBM** `multiclass`. They work by extending Binary Classification loss function to Multi-Classification loss, eg. with **Softmax**.
+
+NOTE: Boosting with Decision Stumps and Softmax loss function is **equivalent to one layer of a Deep Learning Neural Network**.
 
 
 ## Training - Gradient Descent
@@ -257,11 +258,11 @@ While drawing confusion matrix, prior info should be taken into account.
 
 ## Statistics
 - Probability Mass Function is just another name for Discrete Probability Distribution
-- UniformDistribution(x) = 1 if 0 <= x <= 1 else 0
-- In a Normal / Gauss Distribution / Bell Curve:
+- **Uniform Distribution:** All values equally likely.
+- In a **Normal / Gauss Distribution / Bell Curve**:
    - Mean = Median = Mode
    - low standard deviation means narrow bump of bell curve
-   - **Three-Sigma Rule in a normal distribution**:
+   - *Three-Sigma Rule in a normal distribution*:
       - 1 std. dev. (area around both sides of mean) = 68% of total curve area
       - 2 std. dev. = 95%
       - 3 std. dev. = 99.7%
