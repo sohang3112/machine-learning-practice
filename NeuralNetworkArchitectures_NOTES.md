@@ -1,6 +1,11 @@
 # Neural Network Architectures
 Basic feed-forward networks were [previously discussed](DeepLearning_NOTES.md). Now different architectures of Neural Networks will be discussed.
 
+Ways to specialize a pre-trained base model trained on a generic database:
+- **Transfer Learning**: Freeze existing layer weights, add a few hidden layers at the end of base model's hidden layers and only train these. Existing output layer is usually replaced with a new one.
+- **Fine Tuning**: All layers' weights are modified - no frozen layers. *Generally used when specialized task is significantly different from general task*. If we don't want to retrain, we can train a second *downstream model* that converts base model's output into specialized output.
+
+Transfer Learning vs Downstream Models : In transfer learning, base model's output layer is discarded. Whereas while training downstream models, output of base model is used as input (which includes base model's output layer).
 
 ### Image Processing
 Image Tensors' dimensions depend on the no. of channels:
@@ -11,6 +16,16 @@ Each image is a sample, and each image pixel is a feature.
 
 **Sliding vs Rolling Windows**: Sliding (overlapping window), Rolling (non-overlapping window)
 
+### Natural Language Processing (NLP)
+NLP Tasks:
+- *Sentiment Analysis*: classify text as positive / negative
+- *Translation*
+- *Answer Questions* based on text, like who is the hero, what actions occurred, etc.
+- *Summarize / Paraphrase*
+- **Natural Language Generation (NLG)** - gen text that follows *prompt*. A popular technique is **Autoregression** in which one word is generated following prompt, then it's appended to prompt and then next word generated, and so on.
+- *Logical Flow*: Sentence S1 asserts a premise, sentence S2 asserts condition based on premise. Verify if S2 logically follows from S1. **It's difficult, generally requires human help.**
+
+A *Language Model* takes a sequence of words as input and tells us probability of it being a well-formed sentence. Word-based approach is used - each word is converted to a number, where the *vocabalary* has the list of all words and their corresponding indices / numbers.
 
 ## Convolutional Neural Networks (CNN)
 Deep Learning Models in which Convolutional Layers play a significant role. *All-Convolution Networks* have all layers as only convolutional layers.
@@ -130,6 +145,51 @@ The final loss/error function will also check the similarity between weights of 
 Eg. The below is based on MLP autoencoder from *Caffe* library (MLP = Multi-Layer Perceptron means fully connected neural network). It has 50 latent variables:
 
 ![Variational Autoencoder](variational_autoencoder.png)
+
+
+## Recurrent Neural Networks (RNN)
+RNN remembers something about each sample before processing next sample. It's also used for generating new sequences. *Recurrent* means that it uses the hidden state for each input.
+
+- *Sequence* has multiple test samples whose order matters (eg. words in sentence, image frames in video). Each sample in the sequence is called a *token*.
+
+NLP issues (using normal fully-connected networks):
+- *Semantics* (structure of language) is fundamentally different from mathematical curves.
+- Even a tiny error in prediction gives incomprehensible text (since one word to the next can be completely different).
+- Word order is not preserved.
+
+RNN keeps a *hidden state* - output is a function of both input and this hidden state. Each successive input (called a *time step*) updates state - order of inputs matters.
+
+This is the *rolled-up* diagram of a *recurrent cell*, where the *delay* (little black box) represents its hidden state. Its *unrolled* diagram is like a state machine diagram that shows all states and inputs causing state transitions explicitly. The exported state of the layer is usually shown with a dotted line to show that it's available if needed, but can be ignored if not required. 
+
+**A recurrent cell contains one or more neural networks within it.** A recurrent cell is often placed in its own layer, called a *Recurrent Layer*. A network dominated by recurrent layers is called a *Recurrent Neural Network (RNN)*.
+
+Internal state of a recurrent cell is represented by a tensor with a *width* and *height*. If cells in RNN network have same width, it's called *network width*.
+
+![Recurrent Neural Cell (rolled)](rolled_recurrent_neural_cell.png)
+
+The unrolled diagram of a recurrent cell is shown like this:
+
+![Unrolled Recurrent Neural Cell](unrolled_recurrent_cell.png)
+
+During training, gradient error needs to be propogated backwards sequentially from last cell to first. But that's not possible because they are all same cell! This is solved using technique **Backpropogation Through Time (BPTT)**. 
+
+During backprop, suppose we find that gradient of a weight is smaller in previous layer. Then this process will keep on repeating for each previous layer and make the gradient for that weight exponentially smaller. But that means learning will slow down or even stop (due to gradient close to 0)! This is called **Vanishing Gradient** problem. Its inverse is called **Exploding Gradient** problem where the gradient increases exponentially during backprop.
+
+### Long Short-Term Memory (LSTM)
+These gradient issues can be solved with solved with a better recurrent cell, where the internal state changes frequently (short-term) but some portion of information is kept in state for a long time.
+
+![LSTM](long_short_term_memory.png)
+
+**LSTM contains 3 internal neural networks**:
+- one to "forget" (discard) state that's no longer needed (means move number representing that state to 0)
+- one to "remember" (add new info) to state (means adding new number to the state tensor at appropriate location)
+- one to "select" a version of the state as output
+
+LSTM doesn't require repeated copies of itself, so it solves the gradient problems of the basic recurrent cell. Neural networks inside it are trained normally using backprop and optimization.
+
+When we say RNN, LSTM cell is implied. *Gated Recurrent Unit (GRU)* (a popular variant of LSTM) can also be used.
+
+**Tradeoff in training RNN** is that we can use larger networks (with either large no. of cells, or cells with larger state memory) for better predictions, but that will take more time and memory.
 
 
 
