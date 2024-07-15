@@ -87,4 +87,50 @@ Another (easier for me!) method is to simply take a sample input image, and look
 VGG is quite accurate, but we can still make small changes input image's pixel values that aren't noticeable to human eye, but completely mess up CNN output. Such images are called *adversaries*, and change made to input image is called *adverserial preturbation*. Sometimes we find preturbations that mess up model output for any image, these are called **universal preturbation**.
 
 
+## Autoencoder Architecture
+Learns how best to encode a type of data. Mainly used for cleaning noise (eg. denoising grainy images), and for reducing dimensionality. Decoder (2nd half on autoencoder) can be used as a **Generator** that creates new data that looks like the training data. Note that it doesn't always compress input data into fewer latent variables - in Denoising, latent variables can be actually more than input variables!
+
+**Blending**:
+- Content Blending: add/superimpose x% of image1 and y% of image2
+- Parametric / Representation Blending / *Interpolation*: For 2 images, find their latent vars, calc intermediate latent point and then decode it - resultant blended image conceptually represents half of both images.
+
+Autoencoders allow us to blend compressed versions together, and (to a degree) recover the blended uncompressed data.
+
+![Autoencoder Bottleneck](autoencoder_bottleneck.png)
+
+Here the initial dense layers encode N input variables into 20 *latent variables*. Then the dense layers after that decode 20 compressed variables back into N output vars. The narrow area in between encoder and decoder is called *bottleneck*, and last encoding layer (just before bottleneck) is called *bottleneck layer*. The space of all latent variables is called *Latent Space*. Like in this example, we often build encoding layers that decrease no. of vars by 2 times (512 -> 256), and corresponding increase in vars in decoding layers. 
+
+Autoencoder is **semi-supervised learning** because we give an explicit goal (output should equal input) but there aren't any manually determined classes / target variables associated with each input.
+
+The structure of Latent Space isn't immediately apparent, however we can see that there is structure by decoding nearby points in latent space - the system tends to cluster together similar images.
+
+### Convolutional Autoencoders
+
+![Convolutional Autoencoder](convolutional_autoencoder.png)
+
+Here pooling is used between convolutional layers to reduce image width, height in encoder. Upsampling is used in decoder to increase image width, height to original. This performs quite better (i.e., decodes latent variables better).
+
+*Denoising Autoencoder*: Removing noise from image. Note that in below example, input of shape 28x28x1 (784 nums) is encoded into latent variables of shape 7x7x32 (1568 nums) which is about double of nums in original input! But this is ok in this case since we aren't concerened with compressing. Also note that pooling and upsampling layers have been combined with convolution here, which reduced one-third of training time.
+
+![Denoising Autoencoder](denoising_autoencoder.png)
+
+### Variational Autoencoders (VAE)
+They have some degrees of randomness and are non-deterministic - for same input, latent vars output each time are slightly different.
+
+1. All Latent variables should be gathered into one region of latent space, so we know range for random values.
+2. Latent vars of similar inputs should be close together.
+3. Minimize empty regions in latent space.
+
+For point 1 (all latent vars in bounded space), add a constraint to error function that each latent var should approximately form unit gaussian (most points close to 0). 
+
+*Reparametrization Trick*: From each latent variable from encoder, calculate 2 nums: center (mean), and standard deviation (spread). Then pick a random number from a Gaussian distribution with this mean and std-dev. The resultant number is usually very close to center. The new numbers are now used as Latent Variables by decoder - it gives a big error if new image is far from original image. System learns what should be center, spread for each latent variable's gaussian distribution.
+
+The final loss/error function will also check the similarity between weights of encoder and decoder layers. It's done using **Kullback-Leibler (KL) Divergence**, which measures error from encoding information using encoder different from optimal encoder. Here we're asserting that optimal decoder is opposite of optimial encoder.
+
+Eg. The below is based on MLP autoencoder from *Caffe* library (MLP = Multi-Layer Perceptron means fully connected neural network). It has 50 latent variables:
+
+![Variational Autoencoder](variational_autoencoder.png)
+
+
+
 
