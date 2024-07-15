@@ -3,6 +3,7 @@
 Practice Notes on Machine Learning (with code &amp; data for practice exercises). Prefer the most popular libraries - `sklearn` for ML, `pytorch` for Deep Learning.
 
 ### Books
+- **TODO:** Apply theory with book "Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow"
 - [Flexible Imputation of Missing Data](https://stefvanbuuren.name/fimd)
 
 ### TODO

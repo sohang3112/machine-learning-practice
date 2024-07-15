@@ -25,7 +25,11 @@ NLP Tasks:
 - **Natural Language Generation (NLG)** - gen text that follows *prompt*. A popular technique is **Autoregression** in which one word is generated following prompt, then it's appended to prompt and then next word generated, and so on.
 - *Logical Flow*: Sentence S1 asserts a premise, sentence S2 asserts condition based on premise. Verify if S2 logically follows from S1. **It's difficult, generally requires human help.**
 
-A *Language Model* takes a sequence of words as input and tells us probability of it being a well-formed sentence. Word-based approach is used - each word is converted to a number, where the *vocabalary* has the list of all words and their corresponding indices / numbers.
+A *Language Model* takes a sequence of words as input and tells us probability of it being a well-formed sentence. 
+
+2 approaches:
+- Character-based
+- Word-based approach - used most of the time - each word is converted to a number, where the *vocabalary* has the list of all words and their corresponding indices / numbers.
 
 ## Convolutional Neural Networks (CNN)
 Deep Learning Models in which Convolutional Layers play a significant role. *All-Convolution Networks* have all layers as only convolutional layers.
@@ -191,6 +195,28 @@ When we say RNN, LSTM cell is implied. *Gated Recurrent Unit (GRU)* (a popular v
 
 **Tradeoff in training RNN** is that we can use larger networks (with either large no. of cells, or cells with larger state memory) for better predictions, but that will take more time and memory.
 
+### RNN Architectures
+- **CNN-LSTM**: Useful for things like classifying video frames - convolutional layers find & identify objects, while recurrent layers track how the objects move from one layer to next. Note that LSTM is required for tracking objects to deal with cases that normal code can't handle easily - object disappearing & reappearing later, object following non-linear motion (eg. spinning), objects changing appearance, multiple object interactions, accurately work with noisy data, etc.
 
+- **Deep RNN**: Multiple RNN cells stacked on top of each other.
 
+### Translation with RNN
+- **bi-Directional RNN (bi-RNN)**: Used for translating text, so that we can use context from both previous and later words. Here we have 2 RNNs - one that tracks state from start of sentence, one from end. Inputs are given to both RNNs and then their outputs for each word are joined/concat together.
 
+![bi-Directional RNN](bidirectional_rnn.png)
+
+*Deep bi-RNN* has multiple layers of bi-Directional RNNs.
+
+- **Seq2Seq**: Word-wise translation of text is problematic because sentences in different languages can have different lengths (no. of words) and word order (eg. noun before or after verb). Seq2Seq architecture translates input sequence to output sequence (possibly of different length) as a whole.
+
+![Seq2Seq](rnn_seq2seq.png)
+
+2 RNNs are used - encoder and decoder. Encoder RNN's word outputs are ignored - instead its final state is passed to decoder RNN. Decoder RNN uses this as its initial state and produces words using autoregression. *Context Vector* is the final state of the encoder RNN which is passed to decoder.
+
+Decoder RNN gets a special start token as first input: `[START]`. It stops generating with autoregression when it produces special end token `[END]`.
+
+*Long-Term Dependency Problem*: Seq2Seq performs well with smaller sentences but breaks down for larger ones. This is because Context Vector (only thing passed from encoder to decoder) has to decode all information in the sentence, but it's of fixed size - no matter how large we make the Context Vector, we can always make a larger sentence that it can't represent.
+
+### RNN Limitations
+- Processes one word at a time only.
+- Fixed-size context vector has to encode all sequence info - breaks down for larger sequences.
