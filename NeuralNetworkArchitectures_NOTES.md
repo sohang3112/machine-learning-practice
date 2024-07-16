@@ -161,6 +161,8 @@ NLP issues (using normal fully-connected networks):
 - Even a tiny error in prediction gives incomprehensible text (since one word to the next can be completely different).
 - Word order is not preserved.
 
+In NLP, it represents words as simple numbers - first word encountered in text is given number 0, next 1, etc. If a word that's already known is encountered, it's skipped. The *vocabalary* contains all words and their corresponding num
+
 RNN keeps a *hidden state* - output is a function of both input and this hidden state. Each successive input (called a *time step*) updates state - order of inputs matters.
 
 This is the *rolled-up* diagram of a *recurrent cell*, where the *delay* (little black box) represents its hidden state. Its *unrolled* diagram is like a state machine diagram that shows all states and inputs causing state transitions explicitly. The exported state of the layer is usually shown with a dotted line to show that it's available if needed, but can be ignored if not required. 
@@ -220,3 +222,19 @@ Decoder RNN gets a special start token as first input: `[START]`. It stops gener
 ### RNN Limitations
 - Processes one word at a time only.
 - Fixed-size context vector has to encode all sequence info - breaks down for larger sequences.
+
+
+## Attention Networks and Transformers
+
+### Word / Token Embeddings
+In RNN words are represented as words, but we can instead encode them as vectors. *Embedder* algorithms create these *Word/Token Embeddings*. It's also possible to encode sentences instead of words, but word embeddings are more common.
+
+Word Embedding vectors are encoded such that words with similar meanings have vectors near each other. So now we can tolerate some imprecision in predicted word embedding. Embedding vector similarity can be done with cosine similarity.
+
+Pretrained Word Embedder algos: GLoVE, word2vec, fastText
+
+**ELMo (Embedding from Language Models)**: Contextualized Word Embeddings
+- ELMo has 2 layers of forward and backward bi-RNNs, grouped by direction. Layer 1 of forward bi-RNN feeds Layer 2 of forward bi-RNN, and similarly for backward bi-RNN layers, before finally concatenating outputs of both forward & backwards. OTOH in Deep bi-RNNs, layer 1 outputs of forward and backward are concatenated, then fed to next layer.
+- Each input word is turned into 2 word tensors - from forward and backward networks, that are then concatenated to form final word embeddings which have context of both previous and next words. 
+
+![ELMo Contextualized Word Embeddings](elmo_contextual_word_embeddings.png)
