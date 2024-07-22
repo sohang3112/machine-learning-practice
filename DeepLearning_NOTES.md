@@ -58,6 +58,9 @@ Some examples of activation functions:
 
 
 ## Training
+- Gradient is n-dimensional extension of 2-d derivative.
+- *Momentum* technique prevents algo from stopping at places where gradient is 0 (curve flattens) but point is not a minima or maxima.
+- Algo can sometimes get *stuck* (eg. at a local maxima/minima) - it stops learning, accuracy & error rate stop improving.
 
 ### Backpropogation
 For a single neuron $A$, when its output is changed (holding input and all other weights constant), we expect total change in error of the whole network to be $A\delta$. **In Backpropogation, we find this $A\delta$ for each neuron.** The change in output in the neuron can be because of a change in its weights, or its inputs. 

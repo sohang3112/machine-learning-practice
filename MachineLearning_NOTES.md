@@ -61,14 +61,14 @@ graph TD;
 - [*Dealing with Categorical Data:*](https://www.kaggle.com/code/alexisbcook/categorical-variables) Categorical data are like Enums - they have one of a fixed set of values (eg. `male`, `female`, `other`). 
 2 approaches:
    - Ordinal - convert to 1 numerical column having values like $0, 1, 2, ..$
-   - One-Shot Encoding - convert to mutiple columns (one for each value in fixed set), each having value 1 or 0 to indicate whether the value is present or missing. It's *impractical on large no. of columns (>= 15)*. **It's usually slightly better than Ordinal encoding.**
+   - One-Hot Encoding - convert to mutiple columns (one for each value in fixed set), each having value 1 or 0 to indicate whether the value is present or missing. It's *impractical on large no. of columns (>= 15)*. **It's usually slightly better than Ordinal encoding.**
 
 **Data Slicing:**
 - *Sample-wise*: All features are aspects of same thing. *Eg.* When data is audio amplitudes at different times, it makes sense to independantly normalize each audio sample (0 -> quitest, 1 -> loudest).
 - *Feature-wise*: Features are independant (they represent fundamentally different things). *Eg.* Mean Subtraction $X - Avg(X)$
 - *Element-wise*: All elems independant. *Eg.* Centimeters -> Millimeters conversion.
 
-**Data Augmentation:** Enlarge a dataset - eg. in images, we can randomly flip, rotate, scale, shift horizontally/vertically, etc. After augmentation, each column of data is usually standardized so that it has zero mean and unit variance.
+**Data Augmentation:** Enlarge a dataset - eg. in images, we can randomly flip, rotate, scale, shift horizontally/vertically, etc. After augmentation, *each column of data is usually standardized so that it has zero mean and unit variance.*
 
 **Data Shrinking:** (to make training & inference faster)
 - *Feature Selection / Filtering*: Discard useless or almost useless features (eg. correlated with a different feature already present in data). Impact of discarding each column in a dataset can be estimated in various ways - check [feature_selection.ipynb](feature_selection.ipynb) to see some of these.
@@ -88,6 +88,9 @@ graph TD;
 - *Standardization*: Transform data so that it has zero mean and unit variance.
     - *Mean Normalization / Subtraction*: Do $X - Avg(X)$ for each column, so that its mean becomes 0.
     - *Variance Normalization*: Scale it so that its Standard Deviation becomes 1 (so 68% data is in $[-1,1]$).
+    - The result of standardization is called **Z Score / Standardized Value**:
+    $$z = \frac{height - \bar{x}}{s}$$ 
+    where $\bar{x}$ is the Mean, $s$ is the Standard Deviation.
 
 **IMPORTANT**: After doing these operations on training data, *exact same operations should be done on test data*. Scaling factor, addition factor, etc. should be exactly the same in test data as determined in training data.
 
@@ -97,7 +100,7 @@ graph TD;
 Which type of transformation should be done depends on the problem. 
 When X,Y are independant features, Univariate Transformation makes sense.
 
-**TODO:** Check in detail when to do Multilateral Transformation.
+**TODO:** Check in detail when to do Multivariate Transformation.
 
 **Inverse Transformation:** All ML libs have a way to invert transformation. For example:
 ```python
@@ -195,7 +198,7 @@ SVM is parametric since it expects classes to be seperated by linear boundaries.
 It's a *very fast* parametric method in which we assume points of each class are in a normal/gaussian distribution, and we find the parameters for each class's normal distribution during training. During inference, we find the probability of a sample point being in normal distribution of each class - class with maximum probability wins.
 
 ### Ensemble
-Instead of a single model, *Ensemble* is a group of similar models. Each model is trained on slightly different data, which makes it unlikely that all of them will make the same mistake. Final decision is done by voting.\
+Instead of a single model, *Ensemble* is a group of similar models. Each model is trained on slightly different data, which makes it unlikely that all of them will make the same mistake. Final decision is done by voting.
 
 Voting Types:
 - **Most Commonly Used**: *Plurality Voting* is when each model gets a single vote, majority vote wins.
@@ -220,12 +223,6 @@ For Binary Classification, *AdaBoost* boosting algo is used. One way to do multi
 NOTE: Boosting with Decision Stumps and Softmax loss function is **equivalent to one layer of a Deep Learning Neural Network**.
 
 
-## Training - Gradient Descent
-Gradient is n-dimensional extension of 2-d derivative.
-
-*Momentum* technique prevents algo from stopping at places where gradient is 0 (curve flattens) but point is not a minima or maxima
-
-Algo can sometimes get *stuck* (eg. at a local maxima/minima) - it stops learning, accuracy & error rate stop improving.
 
 
 ## Performance Metrics
@@ -304,7 +301,7 @@ Cross Entropy is assymetrical - cross entropy of A wrt B != cross entropy of B w
 - *Binary Cross Entropy* is a special case when 2 chars in alphabet.
 (i.e., binary classification problem, where we're calculating cross entropy of a Probability Distribution Function (PDF) of model prediction wrt PDF of actual labels.)
 - Higher cross entropy means higher error
-- *Relative/Cross Entropy* = extra no. of bits req using imperfect code $Entropy - CrossEntropy$. **TODO:** Cross vs Relative Entropy ; calc Entropy, Cross Entropy, Rel. Entropy in an example
+- *Relative Entropy* = extra no. of bits req using imperfect code $Entropy - CrossEntropy$. **TODO:** Cross vs Relative Entropy ; calc Entropy, Cross Entropy, Rel. Entropy in an example
 - KL Divergence is similar to Cross Entropy (tells us how much error). But Cross Entropy is faster to calculate, so that one is used in practice.
 
 

@@ -238,3 +238,35 @@ Pretrained Word Embedder algos: GLoVE, word2vec, fastText
 - Each input word is turned into 2 word tensors - from forward and backward networks, that are then concatenated to form final word embeddings which have context of both previous and next words. 
 
 ![ELMo Contextualized Word Embeddings](elmo_contextual_word_embeddings.png)
+
+ELMo, and similar algos like *Universal Language Model Fine-Tuning (ULMFit)*, are typically trained on general-purpose databases. When we need them for specific downstream tasks (eg. legal, medical, etc.), they are fine-tuned with additional examples of that domain.
+
+### Self-Attention - Query Kev Value (QKV)
+Calculating word embeddings of a single word (called *Query*):
+- Find $Q$ tensor for Query word.
+- For a given word that we're comparing Query against:
+    - Find 2 tensors: Key $K$, Value $V$
+    - Using dot product, calc tensor $RawAttentionScore = \frac{Q \cdot K^T}{\sqrt{d_k}}$ where $d_k$ is the no. of dimensions in Key Tensor $K$.
+    - Calc tensor AttentionWeight to compare how well Query matches Key: $softmax(rawAttentionScore)$. 
+      **We can view each element in resultant tensor after softmax as relevance $\in [0,1]$ of the corresponding element in Value tensor to our Query word.**
+    - Now scale Value tensor with this weight: $AttentionWeight \circ V$ where $\circ$ means multiplying the 2 tensors element-wise.
+- Finally add results for each Key word: $\sum AttentionWeight \circ V$
+
+So final formula is (final embedding after QKV for a single Query word):
+
+$$\sum softmax(\frac{Q \cdot K^T}{\sqrt{d_k}}) \circ V$$
+
+![Query Key Value (QKV)](attention_query_key_value.png)
+
+In above diagram, dashed line indicates division by $\sqrt{d_k}$ followed by softmax in attention weight.
+
+**3 Neural Networks are required, one each for calculating Query, Key, Value tensors for each word.** Usually all 3 only have one fully-connected layer (no hidden layers). Each of them takes word embedding tensor as input (created by embedder models like word2vec) and outputs a tensor. Word embeddings are already in a space where similar words are close to one another - Query and Key networks fine-tune these so that they can be meaningfully compared for relevance. *Value network has to make values that can be usefully mixed (scaled and added).*
+
+**Seperate networks for Query and Key allows asymmetric relationship - eg. for "it" word, "cat" can be relevant, but the reverse need not be true.**
+
+*Softmax Saturation*: Suppose only $Q \cdot K^T$ was used in raw attention score. Then due to exponential nature of softmax, any large value would completely dominate (be close to 1) and everything else would be close to 0. If that happens, system can't learn. To prevent this, division by $\sqrt{d_k}$ is done before softmax.
+
+A Query word is scored with every word in sentence, including itself. **Usually the word will score highest with itself - but sometimes it can score higher with a different word.** For example, the pronoun "it" can score highest with "cat" word if that is most relevant.
+
+All words in sentence are processed parallelly (using them as Query word, and all words of sentence as Key words). Since none of the steps depend on how long the sentence is (i.e., they can all be done parallelly), **a long sentence can be processed in same time as short sentence** with only constraint being how much memory and computing power are available.
+
