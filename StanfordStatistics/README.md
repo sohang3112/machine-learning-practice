@@ -6,13 +6,17 @@ Notes from course [Intro to Statistics by Stanford](https://www.coursera.org/lea
 **Probability Density of Continous Data**: In a continous probability historgram, absolute probability at any single point is 0, since there are infinite number of points. So we instead use Probability Density, which is probability per unit length.
 
 ### Variance Formula
+
 $$Variance = \sigma^2 = \frac{\sum (x - \bar{x})^2}{n}$$
+
 where $\bar{x}$ is the Mean, $\sigma$ is Standard Deviation, $N$ is no. of observations.
 
 It can also be restated in terms of Expected Value:
+
 $$Variance = \sigma^2 = E[x^2] - E[x]^2$$
 
 $$WeightedVariance = \sigma^2 = \frac{\sum (x - \bar{x})^2 \cdot w_x}{\sum w_x}$$
+
 where $w_x$ is the weight corresponding to each x.
 
 ## Descriptive Statistics
@@ -60,6 +64,7 @@ Sampling Designs:
 - *Stratified Random Sample*: Divide population into strata (eg. based on income), then draw from each using simple random.
 
 $$Estimate = Actual + Bias + Chance/Sample Error$$
+
 where:
 - Chance/Sample Error gets smaller as sample size increases. Changing sample changes this error value.
 - But bias isn't eliminated by increasing sample size.
@@ -86,6 +91,7 @@ Bayes' Rule: $P(B|A) = \frac{P(A|B) P(B)}{P(A)} = \frac{P(A|B) P(B)}{P(A|B) P(B)
 - 99.7% in 3 standard deviations
 
 **Z-Score / Standardized Value**: Using $\bar{x}$ as Mean, $s$ as Standard Deviation:
+
 $$z1 = \frac{x1 - \bar{x}}{s}$$ 
 
 Z Score has no units. $z = 2$ means x is 2 standard deviations above average. $z = -3$ means x is 3 standard deviations below average. *Y axis (frequency count) has no role in calculating Z Score*.
@@ -199,6 +205,7 @@ If statistic of interest is no. of tails $S_n$, then $S_n$ is a random variable 
 NOTE: If we just say "Sampling Distribution histogram", then we mean Probability Histogram of the sample statistic we're looking at.
 
 **Law of Large Numbers**: As sample size $n$ approaches population size $N$, sample mean $\bar{x}$ approaches population mean $\mu$:
+
 $$\lim_{n \to N} \bar{x} = \mu$$
 
 Law of Large Numbers applies to averages and percentages, **but doesn't apply to sums** as sums *increase* with size. It applies to Sampling with Replacement - **it won't work for Sample Without Replacement for large sample size (wrt population size)**.
@@ -237,14 +244,109 @@ For normal approximation to work, requirements are:
   If there's no skew, $n \ge 15$ is ok.
 
 
+## Linear Regression
+Best predictor of a random variable $X$ is its average $\bar{x}$. But if its relation with a different variable is known, then regression can be used to give a better predictor.
 
+Scatter-plot of relation between 2 variables may have:
+- *direction*: sloping up / down
+- *form*: eg. linear
+- *strength*: how closely do points follow the form?
 
+*Explanatory Variable / Predictor* is placed on X axis, *Response Variable* on Y axis.
 
+Linear **Correlation Coefficient** $r \in [-1,1]$ measures strength of linear correlation using Z Scores $z_x$, $z_y$:
 
+$$r = E[z_x \times z_y] = \frac{1}{n} \sum \frac{x_i - \bar{x}}{s_x} \times \frac{y_i - \bar{y}}{s_y}$$
 
+Sometimes standard deviations $s_x$ and $s_y$ are calculated by dividing with $n-1$ instead of $n$ - in that case, divide by $n-1$ here also.
 
+Correlation Coefficient $r$ has no units and is not affected by scaling or shifting.
 
+### Least Squares Method
+We're looking for a line $y_i = m \cdot x_i + c$ that minimizes **Mean Squared Error (MSE)**:
 
+$$MSE = E[(y_i - \^{y_i})^2] = E[(y_i - (m \cdot x_i + c))^2]$$
+
+where $y_i$ is observed val, $\^{y_i}$ is true val.
+
+**Regression Line** that minimizes MSE is $y = m \cdot x + c$ where:
+- slope $m = r \frac{s_y}{s_x}$
+- intercept $c = \bar{y} - m \cdot \bar{x}$
+
+**Regression to Mean**: Std. Dev. of predicted val $\^{y}$ is less than Std. Dev. of input $x$. This is also called *Regression Effect*. So with enough experiments, top $y$ tends to reduce towards mean (and bottom ones tend to increase towards mean). **Regression Fallacy** is wrongly assuming that this is due to some other reason (eg. assuming that top-scorers' scores reduced in re-test because they slacked off).
+
+If a line is trained to predict $y$ from $x$, but we instead use it to predict $x$ from $y$, this will give wrong results and is called **Regression Fallacy**. For predicting $x$ from $y$, invert axes and then re-train as mentioned above.
+
+### Normal Approximation in Regression
+Linear Regression requires that the scatter plot of X and Y variables be *football-shaped*:
+
+![Football-Shaped Scatter Plot for Regression](images/regression_football_shaped.png)
+
+The known $y$ observations near an input $x$ approximately follow a normal curve 
+centered on predicted $\^{y}$ and having Std.Dev. $\sqrt{1-r^2} \times s_y$.
+
+**Example**: 
+- *Question*: We're predicting final exam scores $y$ of students based on their midterm scores $x$.
+    1. Predict the final exam score of a student who scored 41 on the midterm. 
+    2. Among the students who scored around 41 on the midterm, what percentage scored above 60 on the final?
+- *Given*: $\overline{midterm} = 49.5$, $\overline{final} = 69.1$, $s_{mid} = 10.2$, $s_{final} = 11.8$, $r = 0.67$
+- *Solution:*
+```python
+>>> ax, ay, sx, sy, r = 49.5, 69.1, 10.2, 11.8, 0.67    # ax,ay <- Averages of X,Y; sx,sy <- Std.Dev. of X,Y
+>>> slope = r * sy / sx
+>>> intercept = ay - slope * ax
+>>> print(f'Regression Line: y = {slope:.3f} x + {intercept:.3f}')
+Regression Line: y = 0.775 x + 30.733
+
+>>> x = 41
+>>> ypred = slope * x + intercept
+>>> print(f'For {x=}, predicted {ypred=:.3f}')      # answer to part 1 of question
+For x=41, predicted ypred=62.512
+
+>>> ystd = math.sqrt(1-r**2) * ypred
+>>> print(f'Around {x=}, y values approximate a normal curve centered on {ypred=:.3f} with spread {ystd:.3f}')
+Around x=41, y values approximate a normal curve centered on ypred=62.512 with spread 46.406
+
+>>> yquery = 60
+>>> zscore = (yquery - ypred) / sy
+>>> zprobab = scipy.stats.norm.cdf(zscore)       # Lookup probab (< yquery) in Z Table
+>>> print(f'{zscore=:.3f}; Around {x=}, P(y < {yquery}) = {zprobab:.1%}')
+>>> print(f'Final Answer: Around {x=}, P(y > {yquery}) = {1-zprobab:.1%}')    # answer to part 2 of question
+zscore=-0.213; Around x=41, P(y < 60) = 41.6%
+Final Answer: Around x=41, P(y > 60) = 58.4%
+```
+
+### Residuals
+Residuals are the difference between actual and predicted values: 
+
+$$e_i = y_i - \^{y_i}$$
+
+Residuals are used to check whether use of Linear Regression is appropriate. **Residual Plot** is a Scatter Plot of residuals against $x$ values.
+
+Residual Plot should be *an unstructured horizontal band* (**homoscedastic**):
+
+![Unstructured Residual Plot](images/unstructured_residual_plot.png)
+
+OTOH *any kind of curve in Residual Plot is bad*  - curved plots indicates the scatter isn't linear:
+
+![Curved Residual Plots](images/curved_residual_plots.png)
+
+If Residual Plot is curved, we may still be able to use Regressioni after Transformations - eg. applying $log$ or $sqrt$ to an axis (or both axes, if transform on just one axis results in non-linear residual scatter plot).
+
+Another violation of "Football-Shaped" assumption in Linear Regression is **heteroscedastic** residual plot (where variance / distance of points from x axis increases or decreases with x value):
+
+![Heteroscedastic Residual Plot](images/heteroscedastic_residual_plot.png)
+
+**Outliers** are points with very large residuals - these should be seperately examined.
+
+A point whose x-value is far from the mean of the x-values has **high leverage**: it has
+the potential to cause a big change the regression line. Whether it does change the line a lot (**influential point**) or not can only be determined by refitting the regression without the point. *An influential point may have a small residual (because it is influential!)*, so a residual plot is not helpful for this
+analysis.
+
+### More Issues to Avoid in Regression
+- Avoid *extrapolation*: predicting $y$ outside the $x$ range where Regression was trained.
+- Beware of data that are summaries (eg. averages of some data). These are less variable than original data and correlation between averages tends to overstate actual relation of data.
+- **R-Squared** $r^2$ is often reported in Regression - it's the fraction of values in the Y axis that can be explained by Regression Line. So $1 - r^2$ is the fraction of variation in Y axis that's left in the residuals.
 
 
 

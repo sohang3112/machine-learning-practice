@@ -21,7 +21,7 @@ Notes from reading book **Deep Learning: A Visual Approach**.
         - *Binary Classification*: Adaboost
         - *Multi-Class Classification*: Gradient Boosting with softmax - `xgboost`, `lightgbm` libs
 
-**TODO**: Check how each of these models, bagging, boosting would be modified for Regression.
+**TODO**: Check how each of these models, bagging, boosting would be modified for [Regression](../StanfordStatistics/README.md#regression).
 
 ### Deep Learning - Neural Networks (NN)
 - *Basics*: Weights, Biases, Support Layers, Fully-Connected Neurons, Feed-Forward NN, Fully-Connected NN

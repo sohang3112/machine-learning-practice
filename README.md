@@ -6,6 +6,7 @@ Sometimes a combination of Deep Learning and ML techniques can be useful. For ex
 
 ## Resources
 **Books:**
+- [ ] WIP: [Deep Learning: A Visual Approach](DeepLearningVisualApproach/)
 - [ ] WIP: [Introduction to Statistical Learning with Python](IntroToStatisticalLearning/)
 - [ ] [Statistical Thinking in 21st Century (with Python)](https://statsthinking21.github.io/statsthinking21-python/)
 - [ ] Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow
@@ -14,9 +15,14 @@ Sometimes a combination of Deep Learning and ML techniques can be useful. For ex
 **Courses:**
 - [ ] WIP: [Statistics & Probability](StanfordStatistics/): WIP: Stanford course @ Coursera
 
+**Videos:**
+- NLP with Deep Learning: Youtube Video Playlists of Stanford lectures:
+    - [Stanford CS224N](https://youtube.com/playlist?list=PLoROMvodv4rMFqRtEuo6SGjY4XbRIVRd4)
+    - https://youtube.com/playlist?list=PLoROMvodv4rOwvldxftJTmoR3kRcWkJBp
+
 Implementing ML & Neural Networks (NN) from scratch:
 - [ ] WIP: [Impl Deep Learning NN classifier from scratch in APL](neural_network.apl): WIP
-
+- [ ] WIP: [Impl Linear Regression in APL](regression.apl)
 
 ## TODO
 - [ ] WIP:n Try Classification with [Iris Dataset](https://www.kaggle.com/datasets/uciml/iris): available in `sklearn.datasets.load_iris()`. **WIP:** Did Principal Component Analysis to reduce feature dimensions.
