@@ -244,7 +244,7 @@ For normal approximation to work, requirements are:
   If there's no skew, $n \ge 15$ is ok.
 
 
-## Linear Regression (1 input variable)
+## Linear Regression
 Best predictor of a random variable $X$ is its average $\bar{x}$. But if its relation with a different variable is known, then regression can be used to give a better predictor.
 
 Scatter-plot of relation between 2 variables may have:
@@ -350,7 +350,7 @@ analysis.
 
 
 ## Confidence Intervals
-Suppose sample average is 0.58, Standard Error SE is 0.0016. By Central Limit Theorem, there's a 95% chance the population average is within 2 SEs, i.e., $[0.548, 0.612]$ is a **95% confidence interval** for population average (it's default - if not mentioned explicitly, 95% confidence interval is understood).
+Suppose sample average is 0.58, Standard Error SE is 0.0016. By Central Limit Theorem, there's a 95% chance the population average is within 2 SEs, i.e., $[0.548, 0.612]$ is a **95% confidence interval** for population average.
 
 So Confidence Interval is $estimate \pm z SE$ where $z$ is Z Score corresponding to desired Confidence Interval:
 - 95% confidence level ==> z = 1.96
@@ -358,15 +358,4 @@ So Confidence Interval is $estimate \pm z SE$ where $z$ is Z Score corresponding
 - 99% confidence level ==> z = 2.58
 
 For averages (eg. percentages), $SE = \frac{\sigma}{\sqrt{n}}$. We don't know $\sigma$, but **Bootstrap Principle** states that we can approximate population Std.Dev. $\sigma$ can be estimated by sample Std.Dev. $s$ to still get approx confidence interval.
-
-**Margin of Error** (width of confidence interval) is $z SE$. It can be reduced by:
-- increasing sample size $n$, since $SE = \sigma / \sqrt{n}$
-- reduce confidence (eg. 95% -> 80%) - this decreases $z$ but also decreases confidence precision.
-
-For binary distibution ($y$ has values 0 or 1, eg. what % of people voted in election), Margin of Error for 95% confidence interval can be approximated using % calculated with a sample:
-
-$$SamplePercent \pm \frac{1}{\sqrt{n}}$$
-
-This is because $\sigma = \sqrt{p(p-1)} \le 1/2$ for any probability $p$.
-
 

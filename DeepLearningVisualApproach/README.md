@@ -1,4 +1,7 @@
-Notes from reading book **Deep Learning: A Visual Approach**.
+Notes from reading book **Deep Learning: A Visual Approach**:
+1. [Basics of Stats, Data Preprocessing & Machine Learning](1.%20MachineLearning_NOTES.md)
+2. [Deep Learning: Feed-Forward Neural Networks](2.%20DeepLearning_NOTES.md)
+3. [Neural Network Architectures: CNN, RNN, etc.](3.%20NeuralNetworkArchitectures_NOTES.md)
 
 ## Topics Covered - Revise
 

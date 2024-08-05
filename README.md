@@ -7,13 +7,18 @@ Sometimes a combination of Deep Learning and ML techniques can be useful. For ex
 ## Resources
 **Books:**
 - [ ] WIP: [Deep Learning: A Visual Approach](DeepLearningVisualApproach/)
+- [ ] Applied Predictive Modeling
 - [ ] WIP: [Introduction to Statistical Learning with Python](IntroToStatisticalLearning/)
-- [ ] [Statistical Thinking in 21st Century (with Python)](https://statsthinking21.github.io/statsthinking21-python/)
+    - This book's contents are also available in video format in [a YouTube playlist](https://www.youtube.com/playlist?list=PLOg0ngHtcqbPTlZzRHA2ocQZqB1D_qZ5V).
 - [ ] Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow
+- [ ] [Statistical Thinking in 21st Century (with Python)](https://statsthinking21.github.io/statsthinking21-python/)
 - [ ] [Flexible Imputation of Missing Data](https://stefvanbuuren.name/fimd)
 
 **Courses:**
 - [ ] WIP: [Statistics & Probability](StanfordStatistics/): WIP: Stanford course @ Coursera
+
+**Blogs:**
+- [Statistics by Jim](https://statisticsbyjim.com/)
 
 **Videos:**
 - NLP with Deep Learning: Youtube Video Playlists of Stanford lectures:
