@@ -436,3 +436,51 @@ If sample sizes $n_1$, $n_2$ are too small, then use T Test instead.
 ### Paired Difference Test
 *Eg.* Do wives tend to be older than husbands? Data: ages of husband-wife pairs. Here Two-Sample Z Test isn't appropriate since husband and wives' ages aren't independant. So instead we simply do a T Test on age differences of *matched pairs* - this is called **Paired T Test**.
 
+
+## Resampling
+
+### Monte Carlo Method
+In cases where Normal Approximation is not applicable for statistics, we can instead do **Simulation / Monte Carlo Method**: Approximate fixed quantity $\theta$ by the average of independant random variables that have expected value $\theta$. By law of large numbers, approximation error can be arbitarily reduced with a large enough sample size. We estimate population parameter $\theta$ with sample **statistic / estimator** 
+$\^{\theta}$.
+
+Take 1000 samples, each with 100 samples. Calc $\^{\theta}$ for each sample.
+
+$$SE(\^{\theta}) = \sqrt{E[\^{\theta} - E[\^{\theta}]^2]}$$
+
+Here the 1000 $\^{\theta}$ estimators are not independant, but it can be shown that Law of Large Numbers still applies: 
+
+$$s(\^{\theta}_1, \^{\theta}_2 .. \^{\theta}_n) = \sqrt{\frac{\sum (\^{\theta}_i - avg(\^{\theta}))^2}{n-1}} \approx SE(\^{\theta})$$
+
+Note $n-1$ instead of $n$ in denominator.
+
+### Bootstrap Principle
+Pretend sample is population (**plug-in principle**), and resample from this sample to create n samples, then apply Monte Carlo method. Types of Bootstrap are:
+- **Non-Parametric Bootstrap** (most common): draw n samples by drawing from replacement from initial sample
+- **Parametric Bootstrap**: Assume known distribution (say, normal distribution with unknown mean and std.dev.). Then draw from this distribution using estimators for unknown parameters.
+- **Block Bootstrap**: In above, bootstrap samples were drawn independantly. If there is dependence in data (eg. time series), then Block Bootstrap is used.
+
+If sampling distribution of intial sample $\^{\theta}$ is approximately normal, then it's approx $(1-\alpha)$ confidence interval is $\^{\theta} \pm z_{\alpha/2} SE(\^{\theta})$. Eg. when $\alpha = 5%$, then we're finding 95% confidence interval.
+
+But if it's not normal, then we estimate using the histogram of bootstrap samples $\^{\theta}^*$. In the bootstrap histogram, even if it's not normal (eg. skewed like below), we still find the appropriate cutoff points for 95% confidence interval using the midpoint (even though it's not the peak) - that's called **Bootstrap Percentile Interval** 
+$[\^{\theta}_{\alpha/2}^*, \^{\theta}_{1-\alpha/2}^*]$:
+
+![Bootstrap Skewed Histogram](images/bootstrap_percentile_interval.png)
+
+An alternative is to bootstrap $\^{\theta} - \theta$ instead of $\^{\theta}$ to minimize sensitivity to $\theta$ and produce more accurate confidence interval. This is called **Bootstrap Pivotal Interval** and is given by:
+
+$$[2 \theta - \^{\theta}_{(1-\alpha/2)}^* , 2 \theta - \^{\theta}_{\alpha/2}^*]$$
+
+### Bootstrapping for Regression
+We have data $(X_1,Y_1)$,..,$(X_n,Y_n)$ from the simple Linear Regression model:
+
+$$Y_i = a + b X_i + e_i$$
+
+How to estimate standard error and confidence intervals for $a$, $b$ calculated with Least Squares method?
+
+- From data we can compute estimates $\^{a}$ and $\^{b}$.
+- Calc error residuals $\^{e_i} = Y_i - \^{a} - \^{b} X_i$
+- Resample from these residuals to get $e_1^* , .. , e_n^*$
+- Calc bootstrapped responses $Y_i^* = \^{a} + \^{b} X_i + e_i^*$
+
+This gives bootstrap sample $(X_1, Y_1^*)$, .. , $(X_n, Y_n^*)$ from which we can estimate $\^{a}^*$ and 
+$\^{b}^*$ using Least Squares method. Now repeat this a 1000 times, then we can estimate SE in a, b with the standard deviations of a, b estimated each time.
