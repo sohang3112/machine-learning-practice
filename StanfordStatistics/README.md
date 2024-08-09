@@ -370,3 +370,69 @@ $$SamplePercent \pm \frac{1}{\sqrt{n}}$$
 This is because $\sigma = \sqrt{p(p-1)} \le 1/2$ for any probability $p$.
 
 
+## Test of Significance / Hypothetisis Testing
+Hypothesis Testing tests statistical sample results to check whether a statistical result is significant:
+- **Null Hypothesis** $H_0$ is basically "nothing extraordinary is going on" (eg. fair coin)
+- **Alternate Hypothesis** $H_A$ is opp. of Null Hypothesis - says different chance process generated the data (eg. biased coin, i.e., P(Tail) != 1/2).
+
+Hypothesis Testing involves collecting data and evaluating whether to **reject Null Hypothesis**.
+
+**Test Statistic** measures how far away observed data is from data expected if Null Hypothesis $H_0$ was true.
+
+### Z Test
+Most common test statistic is **Z Statistic**:
+
+$$z = \frac{observed - expected}{SE}$$
+
+Large Values of $|z|$ are **evidence** against Null Hypothesis $H_0$. Strength of evidence is measured by **p-value / observed significant level**. P Value is the probability (assuming Null Hypothesis $H_0$ is true) of finding a statistic that is as or more extreme than the current statistic. Note that P Value *doesn't give* probability of $H_0$ - it's either true or not, there's no chance involved.
+
+A result is **statistically significant** (i.e., we can reject Null Hypothesis) when P Value < 5% - here 5% is the **significance level**.
+
+Usually we're interested in *Two-Sided P Value* (i.e., considering area outside bounds of both $z$ and $-z$):
+
+![Two-Sided P Value](images/2sided_pvalue.png)
+
+But sometimes *One-Sided P Value* is also used:
+
+![One-Sided P Value](images/one_sided_pvalue.png)
+
+### T Test
+When sample size is small $n < 20$, then the statistic can't be approximated as a normal curve. Instead we use the distribution **Student’s t-distribution with n - 1 degrees of freedom**:
+
+![T Distribution](images/t_distribution.png)
+
+We approximate population standard deviation $\sigma$ like this (dividing by $n-1$ instead of $n$ to account for additional uncertainity):
+
+$$s = \sqrt{\frac{\sum (x_i - \bar{x})^2}{n-1}}$$
+
+After that Z Test is continued as before. We should also use T Statistic instead of $z$ while calculating 95% Confidence Interval:
+
+$$Estimate \pm t_{n-1} * SE$$
+
+Note that *statistically significant* doesn't necessarily mean that the effect size is important. That's why we usually also report 95% Confidence Interval along with P Value. A 95% Confidence Interval contains all the values that are NOT statistically significant (using two-sided P Value).
+
+[T Table](https://www.ttable.org/) is used to look up P Value:
+- First look up row no. corresponding to degrees of freedom $n-1$.
+- Now look up column with T Score closest to actual t score. In the table 2 values are given, one for One-Sided and Two-Sided test. If only One-Sided is given, we can get Two-Sided probability by doubling it.
+- Finally cell corresponding to this row and column is the P Value.
+
+### Two-Sample Z Test
+If percentages in 2 samples $p1$ and $p2$ are independant then:
+
+$$SE(p2 \pm p1) = \sqrt{SE(p1)^2 + SE(p2)^2}$$
+
+Also if Null Hypothesis is that $p1 = p2$ then we can **pool** the samples from both into a single sample and then calculate pooled estimate SE.
+
+**Pooled Standard Deviation**: If we assume that $\sigma_1 = \sigma_2$, then we can estimate standard deviation with a pooled estimate:
+
+$$s_{pooled}^2 = \frac{(n_1 - 1) s_1^2 + (n_2 - 1) s_2^2}{n_1 + n_2 - 2}$$
+
+But advantage of doing this is small and rests on assumption $\sigma_1 = \sigma_2$, so it's usually avoided.
+
+Two-Sample Z Test is applicable when the 2 samples are independant, but can also be used in some special cases even when samples are dependant - eg. control and treatment groups in a Randomized Trial.
+
+If sample sizes $n_1$, $n_2$ are too small, then use T Test instead.
+
+### Paired Difference Test
+*Eg.* Do wives tend to be older than husbands? Data: ages of husband-wife pairs. Here Two-Sample Z Test isn't appropriate since husband and wives' ages aren't independant. So instead we simply do a T Test on age differences of *matched pairs* - this is called **Paired T Test**.
+
