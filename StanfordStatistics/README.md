@@ -484,3 +484,42 @@ How to estimate standard error and confidence intervals for $a$, $b$ calculated 
 
 This gives bootstrap sample $(X_1, Y_1^*)$, .. , $(X_n, Y_n^*)$ from which we can estimate $\^{a}^*$ and 
 $\^{b}^*$ using Least Squares method. Now repeat this a 1000 times, then we can estimate SE in a, b with the standard deviations of a, b estimated each time.
+
+
+## Analysis of Categorical Data
+
+### Test of Goodness of Fit
+Check how well do observed numbers for each class match with expected %ages for each class using **Chi-Squared** with Degrees of Freedom $numCategories - 1$:
+
+$$\chi^2 = \sum \frac{(observed - expected)^2}{expected}$$
+
+Here $expected = expectedPercent \times totalSampleSize$.
+
+Large Chi-Squared is evidence against null hypothesis $H_0$. Below is chi statistic graph for 5 degrees of freedom - area to the right of observed chi-squared is the P Value (which can be looked up using a [Chi-Squared Table](https://www.medcalc.org/manual/chi-square-table.php)):
+
+![Chi-Squared Test](images/chi_squared.png)
+
+*Chi-Squared Test (multiple categories) is a generalization of a Z Test (2 categories)*.
+
+**Assumption:** Observed data (sample counts) were drawn independantly from a population.
+
+### Test of Homogenity
+Tests whether a categorical variable tested on various populations has the same distribution in each population.
+
+An example **Contingency Table** of Titanic survivors in each ticket class:
+
+| _        | First | Second | Third | Crew |
+| -------- | ----- | ------ | ----- | ---- |
+| Survived | 202   | 118    | 178   | 215  |
+| Died     | 123   | 167    | 528   | 698  |
+
+Here this is NOT sample data drawn independantly from a population. Instead we think of each class as independant data - eg. in First class, total 325 are there, so 325 independant draws of 1 (survived) or 0 (died).
+
+Each class has its own probability histogram (of survival). Null Hypothesis is that probability of survival is same for each class - so we can get this probability by calculating for whole population: $p = numSurvived / total$.
+
+So expected survival count per class is $p \times classTotalCount$. Now Chi-Squared is calculated over all 8 cells of table (i.e., both Survived and Died for each class).
+
+Degrees of Freedom is $(numRows - 1) \times (numColumns - 1)$.
+
+### Test of Independence
+Test if 2 categorical variables are independant. Calcuation is same as in Test of Homogenity (ticket class vs survived/died).
