@@ -5,6 +5,13 @@ Notes from course [Intro to Statistics by Stanford](https://www.coursera.org/lea
 
 **Probability Density of Continous Data**: In a continous probability historgram, absolute probability at any single point is 0, since there are infinite number of points. So we instead use Probability Density, which is probability per unit length.
 
+Appropriate tests for comparing 2 variables:
+
+_           | Categorical | Numerical   |
+----------- | ----------- | ----------- |
+Categorical | Chi-Squared | ANOVA       |
+Numerical   | ANOVA       | Correlation |
+
 ### Variance Formula
 
 $$Variance = \sigma^2 = \frac{\sum (x - \bar{x})^2}{n}$$
@@ -523,3 +530,73 @@ Degrees of Freedom is $(numRows - 1) \times (numColumns - 1)$.
 
 ### Test of Independence
 Test if 2 categorical variables are independant. Calcuation is same as in Test of Homogenity (ticket class vs survived/died).
+
+
+## One-Way Analysis of Variance (ANOVA)
+Check whether a numerical variable behaves similarly for multiple categorical classes. Generalizes *2-sample T Test*. It compares sample variance of means with sample variance within groups.
+
+NOTE: ANOVA compares a Categorical variable and a Numerical variable - it's NOT applicable if both variables are Categorical.
+
+Recall that 2-sample T Test is difference of sample means / SE of difference.
+
+Our example input data is given by these boxplots for 3 classes:
+
+![Boxplots](images/anova_boxplots.png)
+
+We have $k$ groups, total $N$ nums (considering all groups). Each observation row has mean $\bar{y_j}$, and overall mean is $\bar{\bar{y}}$.
+
+| group 1     | group 2     | ... | group k     |
+| ----------- | ----------- | --- | ----------- |
+| $y_{11}$    | $y_{12}$    | ... | $y_{1k}$    |
+| ...         | ...         | ... | ...         |
+| $y_{n_1 1}$ | $y_{n_2 2}$ | ... | $y_{n_k k}$ |
+
+- **Treatment Sum of Squares:** $SST = numRows \sum (\bar{y_j} - \bar{\bar{y}})^2$ has $k-1$ degrees of freedom.
+- **Treatment Mean Square:** $MST = \frac{SST}{k-1}$ measures variability of treatment means $\bar{y_j}$.
+- **Error Sum of Squares:** $SSE = \sum \sum (y_{ij} - \bar{y_j})^2$ has $N-k$ degrees of freedom.
+- **Error Mean Square:** $MSE = \frac{SSE}{N-k}$ measures variability within groups.
+
+**F-Test:** Since we want to compare variability within groups to overall variability, we calculate this ratio:
+
+$$F = \frac{MST}{MSE}$$
+
+Under null hypothesis of equal groups, this ratio should be about 1. It follows a **F-distribution** with $k-1$ and $N-k$ degrees of freedom. Large $F$ is evidence against null hypothesis.
+
+*P Value is area to the right of F score*. It's looked up using an [F Table](http://www.socr.ucla.edu/Applets.dir/F_Table.html) - first look up in column of F Table using degrees of freedom of numerator $k-1$, then in rows using degrees of freedom of denominator $N-k$.
+
+All relevant info is summed up in **ANOVA Table**:
+
+| Source    | df    | Sum of Squares | Mean Square | F         | p-value |
+| --------- | ----- | -------------- | ----------- | --------- | ------- |
+| Treatment | $k-1$ | SST            | MST         | MST / MSE |         |
+| Error     | $N-k$ | SSE            | MSE         |           |         |
+| Total     | $N-1$ | TSS            |             |           |         |
+
+where $TSS = \sum \sum (y_{ij} - \bar{\bar{y}})^2$
+
+This ANOVA table is based on **one-way ANOVA model**:
+
+$$y_{ij} = \mu_j + \epsilon_{ij}$$
+
+where $\mu_j$ is mean of group $j$, and $\epsilon_{ij}$ are measurement errors - independant random variables with mean 0 and variance $\sigma^2$.
+
+So Null Hypothesis is: $\mu_1 = \mu_2 = ... = \mu_k$
+
+It's more convinient to rewrite these in terms of **treatment effect** - deviation of each group's mean from overall mean: $\tau_j = \mu_j - \mu$.
+
+So the model is $y_{ij} = \mu + \tau_j + \epsilon_{ij}$ and 
+null hypothesis is $\tau_1 = \tau_2 = ... = \tau_k = 0$.
+
+We estimate overall mean $\mu$ by grand mean $\bar{\bar{y}}$, treatment effect $\tau_j = \mu_j - \mu$ by
+$\bar{y_j} - \bar{\bar{y}}$, and residual $\epsilon_{ij}$ by $y_{ij} - \bar{y_j}$. Then model becomes:
+
+$$y_{ij} = \bar{\bar{y}} + (\bar{y_j} - \bar{\bar{y}}) + (y_{ij} - \bar{\bar{y}})$$
+
+Similarly sum of squares can be decomposed into $TSS = SST + SSE$ like this:
+
+$$\sum \sum (y_{ij} - \bar{\bar{y}})^2 = \sum (\bar{y_j} - \bar{\bar{y}})^2 + \sum (y_{ij} - \bar{\bar{y}})^2$$
+
+### Assumptions
+- F-test assumes all groups have same variance $\sigma^2$ - can check this roughly by side-by-side boxplots, or with formal tests.
+- Data is independant within and across groups - *eg.* subjects assigned to treatments at random.
+- If F-test rejects, then group means aren't equal, but to find how they differ we can do Bernoulli adjustment to two-sample T Tests on all pairs of means (see it in next module).
