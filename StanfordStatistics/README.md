@@ -600,3 +600,29 @@ $$\sum \sum (y_{ij} - \bar{\bar{y}})^2 = \sum (\bar{y_j} - \bar{\bar{y}})^2 + \s
 - F-test assumes all groups have same variance $\sigma^2$ - can check this roughly by side-by-side boxplots, or with formal tests.
 - Data is independant within and across groups - *eg.* subjects assigned to treatments at random.
 - If F-test rejects, then group means aren't equal, but to find how they differ we can do Bernoulli adjustment to two-sample T Tests on all pairs of means (see it in next module).
+
+
+## Multiple Comparisions
+**Multiple Testing Fallacy / Look-Elsewhere Effect**: A p-value of 1% means that there's a 1% chance of getting such a result by chance. But if we do a large number of statistical tests, we'll get some no. of significant p values just by chance! This is because of **data snooping / data dredging** where many potential relations exist between the data.
+
+Data Snooping and other issues cause problems in:
+- *Reproducibility*: getting same results with same data and methods of analysis
+- *Replicability*: getting similar results with different data, procedures and methods of analysis
+
+### Bonferroni Correction
+If there are $m$ tests, multiply the p-values by $m$. It ensures that probability of any of the tests rejecting in error is less than 5%. It's very restrictive - it guards against possibility of having even a single false positive test.
+
+### Accounting for Multiple Testing with FDR
+An alternative is to try to control the **False Discovery Proportion** (where a discovery is a test in which null hypothesis was rejected):
+
+$$FDP = \frac{\text{no. of false discoveries}}{\text{total no. of discoveries}}$$
+
+**False Discovery Rate (FDR)** controls expected proportion of discoveries that are false.
+
+**Benjamini-Hochberg** procedure to control FDR at $\alpha = 5\%$:
+- Sort the tests' p values so that $p_1 \le p_2 \le ... \le p_m$
+- Find largest $k$ such that $p_k \le \frac{k}{m} \alpha$
+- Declare discoveries for all tests from 1 to $k$.
+
+### Accounting for Multiple Testing with Validation Test
+Before testing, split data into *model-building set* and *validation set*. After finding relations in model-building set, test them in validation set. It's important to ensure that we DON'T look at validation set at all while forming hypothesis.
