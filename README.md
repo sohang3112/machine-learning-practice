@@ -7,15 +7,17 @@ Sometimes a combination of Deep Learning and ML techniques can be useful. For ex
 ## Resources
 **Books:**
 - [ ] WIP: [Deep Learning: A Visual Approach](DeepLearningVisualApproach/)
-- [ ] Applied Predictive Modeling
+- [ ] [Practical Deep Learning for Coders](https://course.fast.ai/) - uses PyTorch
+- [ ] Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow
 - [ ] WIP: [Introduction to Statistical Learning with Python](IntroToStatisticalLearning/)
     - This book's contents are also available in video format in [a YouTube playlist](https://www.youtube.com/playlist?list=PLOg0ngHtcqbPTlZzRHA2ocQZqB1D_qZ5V).
-- [ ] Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow
+- [ ] Applied Predictive Modeling
 - [ ] [Statistical Thinking in 21st Century (with Python)](https://statsthinking21.github.io/statsthinking21-python/)
 - [ ] [Flexible Imputation of Missing Data](https://stefvanbuuren.name/fimd)
 
 **Courses:**
-- [ ] WIP: [Statistics & Probability](StanfordStatistics/): WIP: Stanford course @ Coursera
+- [x] [Statistics & Probability](StanfordStatistics/): Stanford course @ Coursera
+- [ ] [Machine Learning by Andrew Ng](https://www.coursera.org/specializations/machine-learning-introduction): 3-course series @ Coursera
 
 **Blogs:**
 - [Statistics by Jim](https://statisticsbyjim.com/)
@@ -30,6 +32,7 @@ Implementing ML & Neural Networks (NN) from scratch:
 - [ ] WIP: [Impl Linear Regression in APL](regression.apl)
 
 ## TODO
+- Read about Regression. Covered Linear Regression in [Statistics & Probability](StanfordStatistics/) course, now study Logistic Regression, and how to modify ML & Deep Learning methods for regression.
 - [ ] WIP:n Try Classification with [Iris Dataset](https://www.kaggle.com/datasets/uciml/iris): available in `sklearn.datasets.load_iris()`. **WIP:** Did Principal Component Analysis to reduce feature dimensions.
 - [ ] Explore ML methods with [tabular datasets](https://dagshub.com/datasets/tabular/).
 - [ ] Try making adverserial inputs for famous CNNs like VGG.
