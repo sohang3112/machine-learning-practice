@@ -31,6 +31,12 @@ Implementing ML & Neural Networks (NN) from scratch:
 - [ ] WIP: [Impl Deep Learning NN classifier from scratch in APL](neural_network.apl): WIP
 - [ ] WIP: [Impl Linear Regression in APL](regression.apl)
 
+### Computer Vision
+**Courses:**
+- [ ] [OpenCV Course](https://courses.opencv.org/courses/course-v1:OpenCV+Bootcamp+CV0/course/)
+- [ ] [Computer Vision with Embedded ML](https://www.coursera.org/learn/computer-vision-with-embedded-machine-learning) - Coursera
+
+
 ## TODO
 - Read about Regression. Covered Linear Regression in [Statistics & Probability](StanfordStatistics/) course, now study Logistic Regression, and how to modify ML & Deep Learning methods for regression.
 - [ ] WIP:n Try Classification with [Iris Dataset](https://www.kaggle.com/datasets/uciml/iris): available in `sklearn.datasets.load_iris()`. **WIP:** Did Principal Component Analysis to reduce feature dimensions.

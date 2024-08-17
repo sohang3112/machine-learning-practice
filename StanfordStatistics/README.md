@@ -26,6 +26,9 @@ $$WeightedVariance = \sigma^2 = \frac{\sum (x - \bar{x})^2 \cdot w_x}{\sum w_x}$
 
 where $w_x$ is the weight corresponding to each x.
 
+### [Degrees of Freedom](https://statisticsbyjim.com/hypothesis-testing/degrees-freedom-statistics/)
+After estimating a statistic (eg. mean), how many variables are free to vary while the rest are constrained? Usually degrees of freedom is $N-P$ where $N$ is the sample size, $P$ is the no. of parameters/relationships for estimating the statistic.
+
 ## Descriptive Statistics
 Purpose:
 - Communicate info
@@ -572,7 +575,7 @@ All relevant info is summed up in **ANOVA Table**:
 | Error     | $N-k$ | SSE            | MSE         |           |         |
 | Total     | $N-1$ | TSS            |             |           |         |
 
-where $TSS = \sum \sum (y_{ij} - \bar{\bar{y}})^2$
+where $df$ is the Degrees of Freedom, and $TSS = \sum \sum (y_{ij} - \bar{\bar{y}})^2$
 
 This ANOVA table is based on **one-way ANOVA model**:
 
