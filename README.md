@@ -5,6 +5,9 @@ Sometimes a combination of Deep Learning and ML techniques can be useful. For ex
 
 
 ## Resources
+In addition to the below, there are also many useful courses in 
+[Datacamp](https://app.datacamp.com/learn/courses).
+
 **Books:**
 - [ ] WIP: [Deep Learning: A Visual Approach](DeepLearningVisualApproach/)
 - [ ] [Practical Deep Learning for Coders](https://course.fast.ai/) - uses PyTorch
@@ -26,10 +29,6 @@ Sometimes a combination of Deep Learning and ML techniques can be useful. For ex
 - NLP with Deep Learning: Youtube Video Playlists of Stanford lectures:
     - [Stanford CS224N](https://youtube.com/playlist?list=PLoROMvodv4rMFqRtEuo6SGjY4XbRIVRd4)
     - https://youtube.com/playlist?list=PLoROMvodv4rOwvldxftJTmoR3kRcWkJBp
-
-Implementing ML & Neural Networks (NN) from scratch:
-- [ ] WIP: [Impl Deep Learning NN classifier from scratch in APL](neural_network.apl): WIP
-- [ ] WIP: [Impl Linear Regression in APL](regression.apl)
 
 ### Computer Vision
 **Courses:**
