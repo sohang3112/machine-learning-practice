@@ -11,7 +11,7 @@ In addition to the below, there are also many useful courses in
 **Books:**
 - [ ] WIP: [Deep Learning: A Visual Approach](DeepLearningVisualApproach/)
 - [ ] Fast.ai Practical Deep Learning for Coders: [Course](https://course.fast.ai/)and [Book](https://course.fast.ai/Resources/book.html) - uses PyTorch
-- [ ] Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow
+- [ ] WIP: [Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow](Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow)
 - [ ] WIP: [Introduction to Statistical Learning with Python](IntroToStatisticalLearning/)
     - This book's contents are also available in video format in [a YouTube playlist](https://www.youtube.com/playlist?list=PLOg0ngHtcqbPTlZzRHA2ocQZqB1D_qZ5V).
 - [ ] Applied Predictive Modeling
