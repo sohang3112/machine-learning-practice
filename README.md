@@ -65,3 +65,4 @@ In addition to the below, there are also many useful courses in
 - BeRT (2018) - NLP tasks using Transformer architecture
 - AlphaGo (2016) - combined Deep Reinforcement Learning with Monte Carlo tree search
 - Neural Architecural Search (2018) - automated method for designing neural networks
+
