@@ -38,9 +38,12 @@ In addition to the below, there are also many useful courses in
 
 ## TODO
 - Read about Regression. Covered Linear Regression in [Statistics & Probability](StanfordStatistics/) course, now study Logistic Regression, and how to modify ML & Deep Learning methods for regression.
-- [ ] WIP:n Try Classification with [Iris Dataset](https://www.kaggle.com/datasets/uciml/iris): available in `sklearn.datasets.load_iris()`. **WIP:** Did Principal Component Analysis to reduce feature dimensions.
+- [ ] WIP: Try Classification with [Iris Dataset](https://www.kaggle.com/datasets/uciml/iris): available in `sklearn.datasets.load_iris()`. **WIP:** Did Principal Component Analysis to reduce feature dimensions.
 - [ ] Explore ML methods with [tabular datasets](https://dagshub.com/datasets/tabular/).
 - [ ] Try making adverserial inputs for famous CNNs like VGG.
+
+### Projects
+- [ ] WIP: [Digits Classifier](digit-classifier/)
 
 ### Kaggle Problems to Solve
 - [ ] [Home Credit Default Risk](https://www.kaggle.com/c/home-credit-default-risk): Probabilistic Classification
