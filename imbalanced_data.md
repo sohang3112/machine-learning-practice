@@ -24,4 +24,10 @@ Situation: we're training a model to classify tumours as benignant or malicious.
     - *Setting `scale_pos_weight` in sklearn random forest can have better F1 score!!*
 
 5. Custom Loss Function: normally we use *Cross Entropy* loss fn in deep learning, but that may not work well for imbalanced data.
-    - Focal Loss:
+    - Focal Loss: down-weights the well-classified samples, puts more emphasis on under-represented class.
+        so it will trade away some performance in over-represented class for better performance on minority class.
+
+6. Things to keep in mind:
+    - Maintain proportions while train-test split:
+        In sklearn train_test_split fn, add `stratify=y` keyword arg so that in the split data, each dataset maintains the same proportion of data in each class as original.
+    - If some classes have very few data (say, less than 10 in total 1000 data) - just remove them, they will only confuse the model.
