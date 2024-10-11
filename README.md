@@ -17,6 +17,7 @@ In addition to the below, there are also many useful courses in
 - [ ] Applied Predictive Modeling
 - [ ] [Statistical Thinking in 21st Century (with Python)](https://statsthinking21.github.io/statsthinking21-python/)
 - [ ] [Flexible Imputation of Missing Data](https://stefvanbuuren.name/fimd)
+- [ ] [Time Series Forecasting](TimeSeriesForecasting) with Python
 
 **Courses:**
 - [x] [Statistics & Probability](StanfordStatistics/): Stanford course @ Coursera
