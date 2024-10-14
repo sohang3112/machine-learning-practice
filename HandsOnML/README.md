@@ -1,6 +1,10 @@
 # Book: Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow
 
-**Generalization / Out-of-Sample Error** is error rate of model on test data (unseen data). Low training error but high generalization error indicates Over-Fitting. In **holdout validation**, we create a seperate *validation set* that's only tested after all hyperparam tuning, etc. is done.
+## Theory
+
+**Generalization / Out-of-Sample Error** is error rate of model on test data (unseen data). Low training error but high generalization error indicates Over-Fitting. In **holdout validation**, we create a seperate *validation set* that's only tested after all hyperparam tuning, etc. is done. **Data Snooping** means snooping at the test data (even exploring it with eye!) before-hand, and can again lead to a model that doesn't perform as well on actual data.
+
+While splitting data into train & test, we usually use random sampling. But for smaller datasets this can cause sampling bias (i.e., proportion of classes is different in test & train data than in real-world data). For smaller datasets, we can use **stratified sampling** - eg. if we know women are 52% of a population and men are 48%, then we can sample in such a way that this proportion remains same. That is, population is divided into homogenous subgroups called *strata*, and we sample from these according to known proportions.
 
 **Regression**:
 - Types are:
@@ -82,3 +86,24 @@ Pages listing open dataportals
 - [Wikipedia page of ML portals](https://en.wikipedia.org/wiki/List_of_datasets_for_machine-learning_research)
 - [Quora question (open datasets)](https://www.quora.com/Where-can-I-find-large-datasets-open-to-the-public)
 - [r/datasets](https://reddit.com/r/datasets)
+
+
+## Practice
+TODO: implement the various scripts for models given in the book
+
+Sklearn:
+- `sklearn.model_selection.StratifiedShuffleSplit` - provides various ways of splitting data in stratified sampling (i.e., we are targeting a known proportion of each class). Useful for smaller datasets. Since several different splits are provided, we can use it for cross validation (train & test model using various test-train splits).
+
+Pandas:
+- `df.corr()` calculates correlation between every pairs of attributes/columns.
+- `pd.plotting.scatter_matrix(df)` plots correlation between every pairs of attributes.
+
+### Scikit-Learn Design Principles
+We'll use an `imputer = SimpleImputer('median')` as an example, other *estimators* work the same way.
+- Consistent Interface:
+    - *Estimator* has `.fit()` method to estimate parameters based on dataset (for supervised learning, labels also required). Metadata (eg. `imputer`'s `strategy`) passed in class constructor.
+    - *Transformer* is an Estimator having a `.transform()` method that transforms the dataset to return a new dataset. These are simple rule-based strategies, used in data preprocessing. `.fit_transform()` does both fit & transform at once.
+    - *Predictor* is Estimator that's actual ML model (eg. `LinearRegression()`). It has `.predict()` method that takes dataset input and returns predictions for each row. (also `.fit_predict()`). `.score()` method gives a single number that tells how well prediction was done (eg. R^2 score for linear regression).
+- Inspection: estimator's hyperparameters directly available as properties (eg. `imputer.strategy`); 
+              learned parameters attribute has underscore (eg. `imputer.statistics_`).
+- Datasets are Numpy arrays or SciPy sparse matrices. Hyperparams are simple numbers.
