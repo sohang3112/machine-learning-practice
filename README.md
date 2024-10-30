@@ -46,6 +46,12 @@ In addition to the below, there are also many useful courses in
 ### Projects
 - [ ] WIP: [Digits Classifier](digit-classifier/)
 
+### Audio Music Transcription (I want to do this!!)
+Find music notes from song audio. Can use transfer learning:
+- gen mel spectogram of audio
+- get audio embeddings (from base model like YamNet)
+- train model for specific task (music transcription)
+
 ### Kaggle Problems to Solve
 - [ ] [Home Credit Default Risk](https://www.kaggle.com/c/home-credit-default-risk): Probabilistic Classification
 - [ ] [Customer Transaction Prediction](https://www.kaggle.com/c/santander-customer-transaction-prediction): Probabilistic Classification
