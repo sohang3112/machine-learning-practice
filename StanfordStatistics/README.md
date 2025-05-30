@@ -313,9 +313,9 @@ Regression Line: y = 0.775 x + 30.733
 >>> print(f'For {x=}, predicted {ypred=:.3f}')      # answer to part 1 of question
 For x=41, predicted ypred=62.512
 
->>> ystd = math.sqrt(1-r**2) * ypred
+>>> ystd = math.sqrt(1-r**2) * sy
 >>> print(f'Around {x=}, y values approximate a normal curve centered on {ypred=:.3f} with spread {ystd:.3f}')
-Around x=41, y values approximate a normal curve centered on ypred=62.512 with spread 46.406
+Around x=41, y values approximate a normal curve centered on ypred=62.512 with spread 8.760
 
 >>> yquery = 60
 >>> zscore = (yquery - ypred) / sy
