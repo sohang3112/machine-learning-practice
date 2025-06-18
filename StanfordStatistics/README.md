@@ -169,8 +169,8 @@ A question like "what % of voters voted in election" is asking for the mean.
 - assign 1 to all voters who voted, 0 otherwise
 - then no. of voters who voted = sum of counts of all voters $S_n$
 - Question becomes: what % of labels are 1s = $\frac{S_n}{n} \times 100\%$
-- Expected Value $E[\%Of1s] = \mu \times 100\%$ where $\mu$ is the population average - i.e., what % are 1s
-- Standard Error $SE[\%Of1s] = \frac{\sigma}{\sqrt{n}} \times 100\%$ where $\sigma$ is std. dev. of population of 1s and 0s
+- Expected Value $E[PercentOf1s] = \mu \times 100\%$ where $\mu$ is the population average - i.e., what % are 1s
+- Standard Error $SE[PercentOf1s] = \frac{\sigma}{\sqrt{n}} \times 100\%$ where $\sigma$ is std. dev. of population of 1s and 0s
 
 Above 2 formulae (expected error & standard error) are for Sample with Replacement, but we can use them for Sample without Replacement if sample size is much smaller than population size.
 
