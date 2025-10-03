@@ -1,4 +1,4 @@
-# Chapter I. Fundamentals
+# Part 1, Lecture 1: Matrix-Vector Multiplication
 
 Matrix columns are images of unit basis vectors, i.e. $M = [M \mathbf{e_1}, M \mathbf{e_2}, ... M \mathbf{e_m}]$ . 
 This is analogous to a 3D vector being composed of $\mathbf{i}$, $\mathbf{j}$ and $\mathbf{k}$ with coefficients.

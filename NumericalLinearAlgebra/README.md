@@ -37,6 +37,8 @@ To try to go through faster, I'm skipping all the proofs, doing about half of th
 * **Image of matrix** $A$ is space of all possible vectors you can get on applying $A \mathbf{x}$: https://www.projectrhea.org/rhea/index.php/Image_(linear_algebra)
 - Kernel of matrix -- TODO (didnt understand); image & kernel related in **Rank Nullity Theorem** .
 
-## Chapters
+## Parts
 
-* [Chapter 1](Chapter1.md)
+1. Fundamentals
+    1. [Matrix-Vector Multiplication](Lecture1.md)
+    2. [Orthogonal Vectors and Matrices](Lecture2.md)
