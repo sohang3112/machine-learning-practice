@@ -42,7 +42,7 @@ In *Online / Incremental learning*, you train the model by feeding it data seque
 Online Learning is good when:
 - data arrives continously (eg. stock prices) and we need to adapt quickly
 - limited memory storage - old training data can be discarded as it's not required for retraining with new data
-- **Out of Core learning**: when datasets are too big to fit in memory, we can load data in batch, train on it and then train on next batch. 
+- **Out of Core learning**: (type of Online learning) when datasets are too big to fit in memory, we can load data in batch, train on it and then train on next batch. 
 
 An important parameter of Online Learning is **learning parameter**. If it's too high, then model will quickly adapt to new data but also forget old data. If it's too low, model will adapt to new data very slowly due to inertia, but will also be less sensitive to noise / outliers in data.
 
