@@ -17,8 +17,8 @@
         \end{bmatrix}
         $$
     * Basically inner product leads to a scalar: $(1,n) \cdot (n,1) --> (1,1)$ whereas outer product to a matrix: $(m,1) \cdot (1,n) --> (m,n)$
-* *Euclidean length of vector* is square root of inner product of vector with itself: $|\mathbf{x}| = \sqrt{\mathbf{x} \cdot \mathbf{x}}$.
-* Angle between 2 vectors $cos(\alpha) = \frac{\mathbf{x} \cdot \mathbf{y}}{|\mathbf{x}| |\mathbf{y}|}$
+* *Euclidean length of vector* is square root of inner product of vector with itself: $\|\mathbf{x}\| = \sqrt{\mathbf{x} \cdot \mathbf{x}}$.
+* Angle between 2 vectors $cos(\alpha) = \frac{\mathbf{x} \cdot \mathbf{y}}{\|\mathbf{x}\| \|\mathbf{y}\|}$
 * $(A B)^* = B^* A^*$ and $(A B)^{-1} = B^{-1} A^{-1}$
     * Inverse of conjugate = conjugate of inverse, so used with shorthand notation $A^{-*} = (A^{-1})^* = (A^*)^{-1}$
 * *Orthogonal / Perpendicular vectors* have dot product zero: $\mathbf{x} \cdot \mathbf{y} = \mathbf{x}^* \mathbf{y} = 0$ 
@@ -30,9 +30,9 @@
     $$\mathbf{v} = r + \sum_{i=1}^{n} (\mathbf{q_i} \mathbf{q_i}^*) \mathbf{v}$$
 * **Unitary Matrix:** for unitary matrix $Q$, $Q^* = Q^{-1}$, i.e., $Q Q^* = I$. If unitary matrix $Q$ is also real, then it's **Orthogonal**.
     * Inner Products of vectors are preserved: $(Q \mathbf{x})^* (Q \mathbf{y}) = x^* y$
-    * from above, vector magnitudes and angle between them also preserved: $|Q \mathbf{x}| = |\mathbf{x}|$
+    * from above, vector magnitudes and angle between them also preserved: $\|Q \mathbf{x}\| = \|\mathbf{x}\|$
 * *Pythagoras Theorem (extended)*: for $n$ orthogonal vectors $\mathbf{x_1} \cdots \mathbf{x_n}$ :
-  $$ |\sum \mathbf{x_i}|^2 = \sum |\mathbf{x_i}|^2 $$
+  $$ \|\sum \mathbf{x_i}\|^2 = \sum \|\mathbf{x_i}\|^2 $$
 
 Some properties:
 * If a matrix is both triangular and unitary, then it's a diagonal matrix.

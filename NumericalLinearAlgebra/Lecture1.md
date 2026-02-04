@@ -156,7 +156,7 @@ For such a matrix $A \in \mathbb{C}^m$ (i.e., A has shape $m \times m$), followi
 * $null(A) = \{0\}$ . TODO CHECK: isn't null space usually written excluding 0 vector, so this should be empty set ?
 * 0 is NOT an eigenvalue of A
 * 0 is NOT a singular value of A -- TODO: check what is singular value
-* $det(A) \neq 0$
+* Determinant $\|A\| \neq 0$
 
 ## Matrix Inverse times Vector
 

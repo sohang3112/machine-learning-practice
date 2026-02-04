@@ -42,3 +42,4 @@ To try to go through faster, I'm skipping all the proofs, doing about half of th
 1. Fundamentals
     1. [Matrix-Vector Multiplication](Lecture1.md)
     2. [Orthogonal Vectors and Matrices](Lecture2.md)
+    3. [Norms](Lecture3.md)

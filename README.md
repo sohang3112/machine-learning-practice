@@ -19,6 +19,8 @@ In addition to the below, there are also many useful courses in
 - [ ] [Flexible Imputation of Missing Data](https://stefvanbuuren.name/fimd)
 - [ ] [Time Series Forecasting](TimeSeriesForecasting/README.md) with Python
 - [ ] WIP: [Numerical Linear Algebra](NumericalLinearAlgebra/README.md)
+- [ ] TODO: [Probablity and Statistics for Machine Learning by Charu C. Aggarwal](Probability&StatsForML/README.md)
+- [ ] TODO: Optimization for Machine Learning
 
 **Courses:**
 - [x] [Statistics & Probability](StanfordStatistics/): Stanford course @ Coursera
