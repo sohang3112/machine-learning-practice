@@ -37,8 +37,6 @@ Here pretrained CNN (trained on ImageNet dataset) is fine-tuned. When using a pr
 
 **Image Segmentation** means for each pixel, identifying what type of object it's part of - it's half-way to Object Detection.
 
-**TODO:** Lookup what is ResNet (popular CNN architecture).
-
 ## CNN on non-Image inputs
 In section titled "Image Recognizers Can Tackle Non-Image Tasks" of this chapter's notebook, examples are given
 of how non-image inputs can be treated as images and then processed with CNN networks.

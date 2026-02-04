@@ -9,7 +9,7 @@ In addition to the below, there are also many useful courses in
 [Datacamp](https://app.datacamp.com/learn/courses).
 
 **Books:**
-- [ ] WIP: [Deep Learning: A Visual Approach](DeepLearningVisualApproach/)
+- [ ] WIP: [Deep Learning: A Visual Approach](DeepLearningVisualApproach/): read whole book theory, applied practice TODO
 - [ ] Fast.ai Practical Deep Learning for Coders: [Course](https://course.fast.ai/)and [Book](https://course.fast.ai/Resources/book.html) - uses PyTorch
 - [ ] WIP: [Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow](Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow)
 - [ ] WIP: [Introduction to Statistical Learning with Python](IntroToStatisticalLearning/)
@@ -17,7 +17,8 @@ In addition to the below, there are also many useful courses in
 - [ ] Applied Predictive Modeling
 - [ ] [Statistical Thinking in 21st Century (with Python)](https://statsthinking21.github.io/statsthinking21-python/)
 - [ ] [Flexible Imputation of Missing Data](https://stefvanbuuren.name/fimd)
-- [ ] [Time Series Forecasting](TimeSeriesForecasting) with Python
+- [ ] [Time Series Forecasting](TimeSeriesForecasting/README.md) with Python
+- [ ] WIP: [Numerical Linear Algebra](NumericalLinearAlgebra/README.md)
 
 **Courses:**
 - [x] [Statistics & Probability](StanfordStatistics/): Stanford course @ Coursera
